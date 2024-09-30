@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-web-portal
+  namespace: portal     
+spec:
+  progressDeadlineSeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-web-portal
+  template:
+    metadata:
+      labels:
+        app: app-web-portal
+    spec:
+      containers:
+      - name: app-web-portal
+        image: splugin/splugin-io:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            cpu: "1"
+            memory: "50Mi"
+          limits:
+            cpu: "1"
+            memory: "200Mi"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: app-portal-service
+  namespace: portal
+  uid: null
+spec:
+  clusterIP: 10.107.12.245
+  clusterIPs:
+  - 10.107.12.245
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 31697
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: app-web-portal
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}  
+
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-portal-ingress
+  namespace: portal       
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: appweb.portal.info
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app-portal-service
+                port:
+                  number: 8080
+       
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-web-portal
+  namespace: portal    
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app-web-portal
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 70
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 30
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 30
+    scaleUp:
+      stabilizationWindowSeconds: 30
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 30        
