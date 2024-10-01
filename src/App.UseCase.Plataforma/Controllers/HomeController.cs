@@ -1,3 +1,4 @@
+using app.plataforma.Interfaces;
 using App.UseCase.Plataforma.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -8,9 +9,12 @@ namespace App.UseCase.Plataforma.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IDocumentosService _DocumentosService;        
+
+        public HomeController(ILogger<HomeController> logger, IDocumentosService DocumentosService)
         {
             _logger = logger;
+            _DocumentosService = DocumentosService;
         }
 
         public IActionResult Index()
