@@ -13,6 +13,6 @@ namespace app.plataforma
         }
 
         public IMongoCollection<Documentos> Documentos => _database.GetCollection<Documentos>("Documentos");
-        public IMongoCollection<Usuarios> Usuarios => _database.GetCollection<Usuarios>("Documentos");
+        public IMongoCollection<Usuarios> Usuarios => _database.GetCollection<Usuarios>("Usuarios");
     }
 }
