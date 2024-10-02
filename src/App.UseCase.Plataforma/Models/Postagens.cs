@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace app.plataforma.Models
 {
-    public class Documentos
+    public class Postagens
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

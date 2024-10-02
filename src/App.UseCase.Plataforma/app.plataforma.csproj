@@ -9,12 +9,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Application.cs" />
     <Compile Remove="Services\Repository.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Shared\_Header.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Account\Login.cshtml" />
+    <None Include="Views\Operations\Create.cshtml" />
+    <None Include="Views\Operations\CreateRole.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.Identity.Mongo" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     <PackageReference Include="MongoDB.Driver" Version="2.29.0" />
+    <PackageReference Include="MongoDbGenericRepository" Version="1.6.1" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
   </ItemGroup>
 

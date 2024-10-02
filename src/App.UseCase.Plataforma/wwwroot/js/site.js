@@ -12,9 +12,18 @@
 $(document).ready(function () {
 
 
+
+ 
+    //$('#myTab li:last-child a').tab('show');
+    //$('#minhaAba a').on('click', function (e) {      
+    //    e.preventDefault()
+    //    $(this).tab('show')
+    //})
+
+
     $("#divulgacao").click(function () {
         
-        var requestUrl = '/Mensagem/CadastroModal';
+        var requestUrl = '/Postagens/Index';
         $.get(requestUrl)
            
             .done(function (responsedata) {

@@ -12,7 +12,9 @@ namespace app.plataforma
             _database = client.GetDatabase(databaseName);
         }
 
-        public IMongoCollection<Documentos> Documentos => _database.GetCollection<Documentos>("Documentos");
-        public IMongoCollection<Usuarios> Usuarios => _database.GetCollection<Usuarios>("Usuarios");
+        public IMongoCollection<Postagens> Postagens => _database.GetCollection<Postagens>("Postagens");
+        //public IMongoCollection<User> Usuarios => _database.GetCollection<User>("User");
+
+        public IMongoCollection<Favoritos> Favoritos => _database.GetCollection<Favoritos>("Favoritos");
     }
 }
