@@ -9,9 +9,9 @@ namespace app.plataforma.Handlers
         private readonly IFavoritosService _favoritosService;
         private readonly IPostagensService _postagensService;
 
-        private UserManager<ApplicationUser> userManager;
+        private UserManager<ApplicationUser> _userManager;
 
-        private RoleManager<ApplicationRole> roleManager;
+        private RoleManager<ApplicationRole> _roleManager;
 
         public List<Postagens> _postagens{ get; private set; }
 
@@ -21,8 +21,8 @@ namespace app.plataforma.Handlers
         {
             favoritosService = _favoritosService;
             postagensService = _postagensService;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
+            this._userManager = userManager;
+            this._roleManager = roleManager;
         }
         /// <summary>
         /// postagens
@@ -52,7 +52,7 @@ namespace app.plataforma.Handlers
 
         public async Task DeletarTodasPostagemPorIdUsuarioAsync()
         {
-            await _postagensService.DeletarTodosPorIdUsuarioAsync(userManager.GetUserId);
+            await _postagensService.DeletarTodosPorIdUsuarioAsync(_userManager.GetUserId);
         }
 
 
@@ -64,7 +64,7 @@ namespace app.plataforma.Handlers
 
         public async Task<List<Favoritos>> ObterFavoritosPorIdUsuarioAsync()
         {
-            _favoritos = await _favoritosService.ObterListaPorIdUsuarioAsync(userManager.GetUserId);
+            _favoritos = await _favoritosService.ObterListaPorIdUsuarioAsync(_userManager.GetUserId);
             return _favoritos;
         }
 
@@ -80,7 +80,7 @@ namespace app.plataforma.Handlers
 
         public async Task DeletarTodosFavoritosPorIdUsuarioAsync()
         {
-            await _favoritosService.DeletarTodosAsync(userManager.GetUserId);
+            await _favoritosService.DeletarTodosAsync(_userManager.GetUserId);
         }
 
         //public Task<UsuarioPostagem> CarregarDadosAsync(object IdUsuario)

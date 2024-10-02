@@ -5,7 +5,7 @@ using MongoDbGenericRepository.Attributes;
 namespace app.plataforma.Models
 {
     [CollectionName("Users")]
-    public class ApplicationUser : MongoUser<ObjectId>
+    public class ApplicationUser : MongoUser
     {
     }
 }

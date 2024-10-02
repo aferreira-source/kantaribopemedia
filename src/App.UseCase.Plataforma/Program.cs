@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDbGenericRepository;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,31 +44,6 @@ builder.Services.AddScoped<IUsuarioPostagem, UsuarioPostagem>();
 
 var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
 
-builder.Services.AddIdentityMongoDbProvider<MongoUser>(identity =>
-{
-    identity.Password.RequireDigit = false;
-    identity.Password.RequireLowercase = false;
-    identity.Password.RequireNonAlphanumeric = false;
-    identity.Password.RequireUppercase = false;
-    identity.Password.RequiredLength = 1;
-    identity.Password.RequiredUniqueChars = 0;
-
-    identity.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    identity.Lockout.MaxFailedAccessAttempts = 5;
-    identity.Lockout.AllowedForNewUsers = true;
-
-    // User settings.
-    //identity.User.AllowedUserNameCharacters ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    identity.User.AllowedUserNameCharacters = "";
-    identity.User.RequireUniqueEmail = true;
-
-},
-    mongo =>
-    {
-        mongo.ConnectionString = mongoDBSettings.ConnectionString;
-    }
-);
-
 
 
 
@@ -100,6 +76,35 @@ builder.Services.AddSingleton<MongoDBContext>(serviceProvider =>
 //    .AddDefaultTokenProviders();
 
 
+
+
+builder.Services.AddIdentityMongoDbProvider<ApplicationUser>(identity =>
+{
+    identity.Password.RequireDigit = false;
+    identity.Password.RequireLowercase = false;
+    identity.Password.RequireNonAlphanumeric = false;
+    identity.Password.RequireUppercase = false;
+    identity.Password.RequiredLength = 1;
+    identity.Password.RequiredUniqueChars = 0;
+
+    identity.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+    identity.Lockout.MaxFailedAccessAttempts = 5;
+    identity.Lockout.AllowedForNewUsers = true;
+    // User settings.
+    //identity.User.AllowedUserNameCharacters ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    identity.User.AllowedUserNameCharacters = "";
+    identity.User.RequireUniqueEmail = true;
+
+},
+    mongo =>
+    {
+        mongo.ConnectionString = mongoDBSettings.ConnectionString;
+
+    }
+
+);
+
+
 builder.Services
     .AddIdentityCore<ApplicationUser>()
     .AddRoles<ApplicationRole>()
@@ -107,11 +112,8 @@ builder.Services
     {
         mongo.ConnectionString = mongoDBSettings.ConnectionString;
         // other options
-    })
-    .AddDefaultTokenProviders();
-
-
-
+    });
+  
 
 var app = builder.Build();
 

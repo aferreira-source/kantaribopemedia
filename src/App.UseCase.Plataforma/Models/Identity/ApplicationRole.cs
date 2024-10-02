@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 namespace app.plataforma.Models
 {
     [CollectionName("Roles")]
-    public class ApplicationRole : MongoRole<ObjectId>
+    public class ApplicationRole : MongoRole
     {
 
     }

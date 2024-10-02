@@ -2,25 +2,36 @@ using app.plataforma.Handlers;
 using app.plataforma.Models;
 using app.plataforma.Services;
 using App.UseCase.Plataforma.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace App.UseCase.Plataforma.Controllers
 {
+    [Authorize]
     public class PostagensController : Controller
     {
         private readonly ILogger<PostagensController> _logger;
         private readonly IPostagensService _postagensService;
         private readonly IUsuarioPostagem _usuarioPostagem;
-        
 
-        public PostagensController(ILogger<PostagensController> logger, IPostagensService postagensService, IUsuarioPostagem usuarioPostagem)
+        private UserManager<ApplicationUser> userManager;
+
+        private RoleManager<ApplicationRole> roleManager;
+
+        public PostagensController(ILogger<PostagensController> logger, 
+            IPostagensService postagensService, IUsuarioPostagem usuarioPostagem,
+            UserManager<ApplicationUser> userManager, 
+            RoleManager<ApplicationRole> roleManager)
         {
+            this.userManager = userManager;
+            this.roleManager = roleManager;
             _logger = logger;
             _postagensService = postagensService;
             _usuarioPostagem = usuarioPostagem;
-
         }
+
 
         public IActionResult Index()
         {

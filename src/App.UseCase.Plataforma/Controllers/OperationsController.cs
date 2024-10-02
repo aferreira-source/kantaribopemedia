@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace App.UseCase.Plataforma.Controllers
+namespace IdentityMongo.Controllers
 {
     public class OperationsController : Controller
     {
