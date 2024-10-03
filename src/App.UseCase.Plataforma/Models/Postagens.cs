@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace app.plataforma.Models
+namespace app.plataforma
 {
     public class Postagens
     {

@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace app.plataforma.Models
+namespace app.plataforma
 {
     public class Favoritos : EntityBase
     {
@@ -9,5 +9,4 @@ namespace app.plataforma.Models
         public object? usuarioId { get; set; }
         public string? dtCadastro { get; set; }
     }
-
 }

@@ -1,10 +1,10 @@
-﻿using app.plataforma.Models;
+﻿using app.plataforma.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace App.UseCase.Plataforma.Controllers
+namespace app.plataforma.Controllers
 {
     public class AccountController : Controller
     {
@@ -39,7 +39,7 @@ namespace App.UseCase.Plataforma.Controllers
                         return Redirect(returnurl ?? "/");
                     }
                 }
-                ModelState.AddModelError(nameof(email), "Login Failed: Invalid Email or Password");
+                ModelState.AddModelError(nameof(email), "Falha no login: E-mail ou senha inválida");
             }
 
             return View();

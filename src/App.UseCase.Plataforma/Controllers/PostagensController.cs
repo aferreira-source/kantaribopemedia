@@ -1,13 +1,13 @@
 using app.plataforma.Handlers;
-using app.plataforma.Models;
-using app.plataforma.Services;
+using app.plataforma.Identity;
+using app.plataforma.Interfaces;
 using App.UseCase.Plataforma.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace App.UseCase.Plataforma.Controllers
+namespace app.plataforma.Controllers
 {
     [Authorize]
     public class PostagensController : Controller

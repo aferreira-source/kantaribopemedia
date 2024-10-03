@@ -1,20 +1,35 @@
 using app.plataforma;
 using app.plataforma.Handlers;
-using app.plataforma.Models;
+using app.plataforma.Handlers.Hubs;
+using app.plataforma.Identity;
+using app.plataforma.Interfaces;
 using app.plataforma.Services;
-using App.UseCase.Plataforma.Services;
+using App.UseCase.Plataforma;
 using AspNetCore.Identity.Mongo;
-using AspNetCore.Identity.Mongo.Model;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDbGenericRepository;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = 50485760; // 10MB em bytes
+});
+
+builder.Services.AddSignalR(options =>
+{
+    options.MaximumReceiveMessageSize = 502400000; // tamanho máximo em bytes
+});
+
 
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection(nameof(MongoDBSettings)));
 
@@ -34,48 +49,22 @@ builder.Services.AddSingleton<IMongoClient>(_ => {
     return new MongoClient(connectionString);
 });
 
+
 //inject
 builder.Services.AddScoped<IPostagensService, PostagensService>();
 builder.Services.AddScoped<IFavoritosService, FavoritosService>();
 builder.Services.AddScoped<IUsuarioPostagem, UsuarioPostagem>();
 
 
+builder.Services.AddSingleton<List<User>>();
+builder.Services.AddSingleton<List<Connection>>();
+builder.Services.AddSingleton<List<Call>>();
 
+builder.Services.AddSingleton<List<UserAutomatic>>();
+builder.Services.AddSingleton<List<ConnectionAutomatic>>();
+builder.Services.AddSingleton<List<CallAutomatic>>();
 
 var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
-
-
-
-
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    // Cookie settings
-    options.Cookie.HttpOnly = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-    options.LoginPath = "/Identity/Account/Login";
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-    options.SlidingExpiration = true;
-});
-
-
-builder.Services.AddSingleton<MongoDBContext>(serviceProvider =>
-{
-    return new MongoDBContext(mongoDBSettings.ConnectionString, mongoDBSettings.DatabaseName);
-});
-
-//builder.Services
-//    .AddIdentityCore<MongoUser>()
-//    .AddRoles<MongoRole>()
-//    .AddMongoDbStores<MongoUser, MongoRole, ObjectId>(mongo =>
-//    {
-//        mongo.ConnectionString = mongoDBSettings.ConnectionString;
-//        // other options
-//    })
-//    .AddDefaultTokenProviders();
-
-
 
 
 builder.Services.AddIdentityMongoDbProvider<ApplicationUser>(identity =>
@@ -113,15 +102,18 @@ builder.Services
         mongo.ConnectionString = mongoDBSettings.ConnectionString;
         // other options
     });
-  
+
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -130,8 +122,25 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseStreamSocket();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<HubAutomatico>("/HubAutomatico", options =>
+    {
+        options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+    });
+  
+    endpoints.MapHub<MyHub>("/cnnctn", options =>
+    {
+        options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+    });
+
+  
+});
 
 app.Run();

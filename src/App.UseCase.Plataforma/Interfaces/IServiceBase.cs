@@ -1,6 +1,4 @@
-﻿using app.plataforma.Models;
-
-namespace app.plataforma.Interfaces
+﻿namespace app.plataforma.Interfaces
 {
     public interface IServiceBase<T> where T : class
     {

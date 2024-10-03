@@ -1,9 +1,9 @@
-﻿using app.plataforma.Models;
+﻿using app.plataforma.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace IdentityMongo.Controllers
+namespace app.plataforma.Controllers
 {
     public class OperationsController : Controller
     {
@@ -20,7 +20,7 @@ namespace IdentityMongo.Controllers
         public ViewResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(UserIdentity user)
         {
             if (ModelState.IsValid)
             {

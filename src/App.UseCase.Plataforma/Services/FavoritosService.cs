@@ -1,9 +1,7 @@
-﻿using app.plataforma;
-using app.plataforma.Models;
-using app.plataforma.Services;
+﻿using app.plataforma.Interfaces;
 using MongoDB.Driver;
 
-namespace App.UseCase.Plataforma.Services;
+namespace app.plataforma.Services;
 
 public class FavoritosService : IFavoritosService
 {

@@ -1,5 +1,4 @@
-﻿using app.plataforma.Models;
-
+﻿
 namespace app.plataforma.Handlers
 {
     public interface IUsuarioPostagem

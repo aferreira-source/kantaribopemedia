@@ -1,5 +1,5 @@
-﻿using app.plataforma.Models;
-using app.plataforma.Services;
+﻿using app.plataforma.Identity;
+using app.plataforma.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace app.plataforma.Handlers

@@ -1,5 +1,4 @@
-﻿using app.plataforma.Models;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 
 namespace app.plataforma
 {

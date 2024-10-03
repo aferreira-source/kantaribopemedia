@@ -1,10 +1,7 @@
-﻿using AspNetCore.Identity.Mongo;
-using AspNetCore.Identity.Mongo.Model;
-using MongoDB.Bson;
+﻿using AspNetCore.Identity.Mongo.Model;
 using MongoDbGenericRepository.Attributes;
-using System.Runtime.CompilerServices;
 
-namespace app.plataforma.Models
+namespace app.plataforma.Identity
 {
     [CollectionName("Roles")]
     public class ApplicationRole : MongoRole
