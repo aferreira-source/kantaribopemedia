@@ -17,6 +17,7 @@ const declineCall = () => {
     caller = null;
     playAudio("MyAudio", 'stop')
     playAudio("AudioReceive", 'stop')
+
     $('#callmodal').modal('hide');
 };
 

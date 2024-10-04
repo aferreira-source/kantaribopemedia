@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using app.plataforma.Identity
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WEbCam</title>
+    <title>@ViewData["Title"] - Portal notícias</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
@@ -24,40 +26,26 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"> *@
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm  navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WEbCam </a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/use-case.png" width="30" height="30" class="d-inline-block align-top rounded-circle" alt="">
+                    Portal de Notícias
+                </a>              
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="IndexAutomatica">Index Automatico</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="IndexWebRTC">IndexWebRTC</a>
-                        </li>                       
-                       
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="IndexSemSocket">IndexSemSocket</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-
-                    </ul>
-
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">           
 
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="IndexWebRTC">Criar Live</a>
                         </li>
                         <li class="nav-item">
                             @* <a class="nav-link" id="divulgacao" data-toggle="modal"  href="#" data-bs-target="#staticBackdrop">Postagem</a> *@
@@ -67,32 +55,22 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Favoritos</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Operations" asp-action="Create">Create Identity User</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Operations" asp-action="CreateRole">Create Identity Role</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                        </li>
-                        @*       <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Secured" asp-action="Index">Secured</a>
-                        </li> *@
+                    </ul>
+                    <ul>
                         @{
                             if (User?.Identity?.IsAuthenticated ?? false)
                             {
-                                <li class="nav-item">
-                                    <u>Welcome: @User.Identity.Name</u>
+
+
+                                <li class="font-weight-normal">
+                                    <label class="text-white">@User.Identity.Name &nbsp;</label>
                                     <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
                                 </li>
-
+                                
                             }
                         }
-
                     </ul>
+                   
                 </div>
             </div>
         </nav>
@@ -123,10 +101,14 @@
  @*   <script src="https://code.jquery.com/jquery-3.6.3.js"></script>*@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/SignLr/signalr.js"></script>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
-    <script src="~/js/jsextras/adapter.min.js"></script>
+    @* <script src="~/js/jsextras/adapter.min.js"></script> *@
+    <script src="~/js/jsextras/adapter-latest.js.js"></script>
+
     <script src="~/js/jsextras/adapter.screenshare.js"></script>
     <script src="~/js/jsextras/adapter.screenshare.min.js"></script>
     <script src="~/js/jsextras/custom.js"></script>

@@ -1,101 +1,94 @@
 ﻿@{
-    ViewData["Title"] = "Portal de notícias";
+    ViewData["Title"] = "Home Page";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="card">
-            <h5 class="card-header bg-dark text-white">Notícias</h5>
-            <div class="card-body">
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col-7">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h5 class="mt-0 mb-1">Media object</h5>
-                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                </div>
-                                <img class="ml-3" src="..." alt="Generic placeholder image">
-                            </div>
-
-                            <ul class="list-unstyled">
-                                <li class="media border-bottom">
-                                    <img class="mr-3" src="..." alt="Generic placeholder image">
-                                    <div class="media-body">
-                                        <h5 class="mt-0 mb-1">List-based media object</h5>
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                    </div>
-                                </li>
-                                <li class="media my-4 border-bottom">
-                                    <img class="mr-3" src="..." alt="Generic placeholder image">
-                                    <div class="media-body">
-                                        <h5 class="mt-0 mb-1">List-based media object</h5>
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                    </div>
-                                </li>
-                                <li class="media border-bottom">
-                                    <img class="mr-3" src="..." alt="Generic placeholder image">
-                                    <div class="media-body">
-                                        <h5 class="mt-0 mb-1">List-based media object</h5>
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col">
-                            <div class="container">
-                                <div class="row" id="div-linha-card">
-                                    <div class="card">
-                                        <h5 class="card-header bg-dark text-white">Live</h5>
-                                        <div class="card-body">
-                                            <h5 class="card-title">Assuntos relacionados a profissões de TI</h5>
-                                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                            <a href="#" class="btn btn-primary">Entrar</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="card">
-                                        <h5 class="card-header bg-dark text-white">Live</h5>
-                                        <div class="card-body">
-                                            <h5 class="card-title">Assuntos sobre política 2024</h5>
-                                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                            <a href="#" class="btn btn-primary">Entrar</a>
-                                        </div>
-                                    </div>
-                                </div>
+<div class="row">
+    <div class="col-12 text-center">
+        <button id="btnOpenCamera" class="btn btn-info mx-auto" data-state="closed">Open xx camera</button>
+    </div>
+    <div class="col-6" @*style="display:none;"*@>
+        <div class="card card-body bg-light m-2 h-100">
+            <div><p id="lblState">Pronto para conectar</p></div>
 
 
+            <div class="d-lg-flex flex-column flex-row ">
 
-                            </div>
-
-                        </div>
+                <div class="p-2 w-100">
+                    <input id="server" type="text" class="w-100" />
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="m-2">
+                        <button id="btnConnect" type="submit" class="btn btn-info">Abrir Socket</button>
+                    </div>
+                    <div class="m-2">
+                        <button id="btnClose" class="btn btn-danger" disabled>Fechar Socket</button>
                     </div>
                 </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card card-body bg-light m-2 h-100">
+            <div class="d-flex">Seu Id:&nbsp;<p id="IdUser"></p></div>
+            <ul id="usersdata" class="list-group">
+                <li class="list-group-item">Usuarios Online</li>
+                <li class="list-group-item user" data-cid="" data-username="">
+                    <a href="#">
+                        <div class="username"></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4 m-2">
+        <div class="d-lg-flex flex-row">
+            <div class="col-5">
+                <h4>Você</h4>
+                <video id="video" autoplay></video>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-5">
+                <h4>Ligação Recebida</h4>
+                <img id="img" src="">
+            </div>
+        </div>
+
+    </div>
+    <div class="col-2"></div>
+    <div class="col-4 m-2">
+        <h4>Ligador </h4>
+        <img id="imgHub" src="">
+    </div>
+</div>
+<div class="modal fade" id="callmodal" tabindex="-1" role="dialog" aria-labelledby="callmodaltitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="callmodaltitle">Hello</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="declineCall()" data-dismiss="modal">Decline</button>
+                <button type="button" class="btn btn-primary" onclick="acceptCall()">Accept</button>
             </div>
         </div>
     </div>
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
 @section Scripts
 {
-
+   
 <script>
-
+    
         'use strict';
 
         var video = document.getElementById('video');
@@ -204,11 +197,11 @@
 
         });
 
-
+       
 
 
 
 </script>
  <script src="~/js/funcoeshub.js"></script>
 
-} 
+}

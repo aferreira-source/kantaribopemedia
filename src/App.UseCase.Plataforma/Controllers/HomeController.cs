@@ -1,11 +1,13 @@
 ﻿using app.plataforma.Handlers.Hubs;
 using App.UseCase.Plataforma.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics;
 
 namespace app.plataforma.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,7 +23,8 @@ namespace app.plataforma.Controllers
         public IActionResult Index()
         {
             TempData["success"] = "Sucesso";
-            return View("IndexWebRTC");
+            return View();
+            //return View("IndexWebRTC");
         }
 
         //public async Task<IActionResult> Hub(string TargetId,IFormFile arquivo)

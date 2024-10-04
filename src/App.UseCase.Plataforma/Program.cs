@@ -76,7 +76,7 @@ builder.Services.AddIdentityMongoDbProvider<ApplicationUser>(identity =>
     identity.Password.RequiredLength = 1;
     identity.Password.RequiredUniqueChars = 0;
 
-    identity.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+    identity.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
     identity.Lockout.MaxFailedAccessAttempts = 5;
     identity.Lockout.AllowedForNewUsers = true;
     // User settings.
@@ -90,9 +90,7 @@ builder.Services.AddIdentityMongoDbProvider<ApplicationUser>(identity =>
         mongo.ConnectionString = mongoDBSettings.ConnectionString;
 
     }
-
 );
-
 
 builder.Services
     .AddIdentityCore<ApplicationUser>()

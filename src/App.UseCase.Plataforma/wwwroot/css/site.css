@@ -21,3 +21,11 @@ body {
     background-color: #f4f7f6;
     margin-bottom: 60px;
 }
+
+#div-linha-card {
+    padding-bottom: 10px;
+}
+
+.border-bottom {
+    padding-bottom: 15px;
+}

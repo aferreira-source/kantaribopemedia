@@ -34,6 +34,7 @@ namespace app.plataforma.Controllers
                 {
                     await signInManager.SignOutAsync();
                     Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, password, false, false);
+
                     if (result.Succeeded)
                     {
                         return Redirect(returnurl ?? "/");

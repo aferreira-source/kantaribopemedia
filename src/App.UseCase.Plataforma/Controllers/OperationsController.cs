@@ -35,7 +35,7 @@ namespace app.plataforma.Controllers
                 //await userManager.AddToRoleAsync(appUser, "Admin");
 
                 if (result.Succeeded)
-                    ViewBag.Message = "User Created Successfully";
+                    ViewBag.Message = "Cadastro realizado com sucesso!";
                 else
                 {
                     foreach (IdentityError error in result.Errors)
