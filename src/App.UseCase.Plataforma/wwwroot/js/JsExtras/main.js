@@ -133,7 +133,7 @@ function handleSuccess(stream) {
 
     //const gumVideo = document.querySelector('video#gum');
 
-    const gumVideo = document.querySelector('video#localVideo');
+    const gumVideo = document.querySelector('video#gum');
   //localVideo
   gumVideo.srcObject = stream;
 
