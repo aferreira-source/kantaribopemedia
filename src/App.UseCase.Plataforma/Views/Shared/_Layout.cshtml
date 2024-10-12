@@ -44,32 +44,54 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="IndexWebRTC">Criar Live</a>
-                        </li>
-                        <li class="nav-item">
-                            @* <a class="nav-link" id="divulgacao" data-toggle="modal"  href="#" data-bs-target="#staticBackdrop">Postagem</a> *@
-                            <a class="nav-link" asp-area="" asp-controller="Postagens" asp-action="Index">Postagens</a>
+                  @*       <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Live">Criar Live</a>
+                        </li> *@
 
+@*                         <li class="nav-item"> *@
+                            @* <a class="nav-link" id="divulgacao" data-toggle="modal"  href="#" data-bs-target="#staticBackdrop">Postagem</a> *@
+                            @* <a class="nav-link" asp-area="" asp-controller="Postagens" asp-action="Index">Postagens</a> *@
+
+                        @* </li> *@
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Postagens
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Postagens" asp-action="Video">Vídeo</a></li>
+                                <li><a class="dropdown-item" href="#">Audios</a></li>
+                                <li><a class="dropdown-item" href="#">Upload</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Minhas publicações</a></li>
+                            </ul>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Operations" asp-action="Create">Novo Usuário</a>
+                        </li>
+
+
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Favoritos</a>
                         </li>
                     </ul>
-                    <ul>
+                  
+
                         @{
                             if (User?.Identity?.IsAuthenticated ?? false)
                             {
+                            <ul class="navbar-nav flex-grow-2">
 
-
-                                <li class="font-weight-normal">
-                                    <label class="text-white">@User.Identity.Name &nbsp;</label>
+                                <li class="nav-item">
+                                     <label class="text-white align-content-center">@User.Identity.Name &nbsp;</label>
+                          
                                     <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
                                 </li>
-                                
+                            </ul>
                             }
                         }
-                    </ul>
+                   
                    
                 </div>
             </div>

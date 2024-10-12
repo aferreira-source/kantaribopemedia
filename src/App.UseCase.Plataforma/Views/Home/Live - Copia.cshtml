@@ -1,0 +1,309 @@
+﻿<style>
+
+    .fixed-size-div {
+        height: 100px;
+        overflow-y: auto;
+    }
+
+</style>
+
+<link href="~/css/chatcss.css" rel="stylesheet" />
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-8">
+
+            <div class="card card-body bg-light m-2 ">
+                <video id="gum" class="small-video" controls playsinline autoplay muted>
+
+                    Seu navegador não suporta a tag de vídeo.
+                </video>
+            </div>
+            <div class="m-2">
+                @* <button id="start">Start camera</button> *@
+                <button id="record" class="btn btn-dark">Iniciar</button>
+                @*                 <button id="play" disabled>Play</button> *@
+                <button id="publicar" disabled class="btn btn-dark">Publicar</button>
+            </div>
+            @*
+
+            <video id="gum" playsinline autoplay muted></video> *@
+            <div style="display:none">
+                <video id="recorded" style="display:none" playsinline loop></video>
+
+                <div>
+                    Recording format: <select id="codecPreferences" disabled></select>
+                </div>
+
+                <div>
+                    <h4>Media Stream Constraints options</h4>
+                    <p>Echo cancellation: <input type="checkbox" id="echoCancellation"></p>
+                </div>
+
+                <div class="d-flex mx-auto">Seu Id:&nbsp;<p id="IdUser"></p></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card card-body bg-light">
+                <ul id="usersdata" class="list-group fixed-size-div">
+                    <li class="list-group-item">Usuarios Online</li>
+                </ul>
+                </<div>
+                </div>
+            </div>
+
+            
+            
+
+        </div>
+
+
+
+@section Scripts
+{
+    <script src="~/js/variaveis.js"></script>
+    <script src="~/js/live/live-chat.js"></script>
+    <script src="~/js/live/live-funcoes.js"></script>
+    <script src="~/js/live/live.js"></script>
+
+    <script>
+        'use strict';
+
+
+        var hubUrl = document.location.origin + '/live';
+        var wsconn = new signalR.HubConnectionBuilder()
+            .withUrl(hubUrl, signalR.HttpTransportType.WebSockets)
+            .configureLogging(signalR.LogLevel.Debug)
+            .build();
+
+   
+
+
+ 
+        var IdConecçao = null
+
+        var peerConnection = null //instancia o webRTC
+        var users = [], localStream, connections = {};
+        var user = null;
+        var caller = null;
+
+
+        $(document).ready(function () {
+
+           
+
+            wsconn.start().then(() => {
+
+                debugger;
+                askUsername()
+                initializeUserMedia() // ligo a cam
+
+                IdConecçao = wsconn.connection.connectionId
+                console.info(`Connected as ${user}`);
+                $("#lblUser").value(user.askUsername);
+
+            }).catch(err => console.error(err));            
+
+            
+            wsconn.on('AttUsuariosOnline', (userList) => {
+                debugger;
+                console.info('Check online users...' + JSON.stringify(userList));
+                users = userList;
+
+                $('#usersdata li.usuarios').remove();
+
+                $.each(userList, function (index) {
+
+                    debugger;
+
+                    var userIcon = '', status = '';
+                            //alert('meu ' + userList[index].username + ' ' + wsconn.connection.connectionId);
+
+                    // if (userList[index].username === $("#lblUser").text()) {
+                            if (userList[index].connectionId === wsconn.connection.connectionId) {
+
+                    } else {
+
+
+                        if (userList[index].username !== user) {
+                       
+                            var onlineUsers = '';
+                            onlineUsers += '<li class="list-group-item usuarios" data-username=' + userList[index].username + '>';
+                            onlineUsers += '<div class="d-lg-flex flex-row">';
+                            onlineUsers += '<div class="m-1 d-lg-flex justify-content-center align-items-center">' + userList[index].username + '</div>';
+                            onlineUsers += '<div class="d-flex flex-row justify-content-center align-items-center">';
+                            onlineUsers += '</div>';
+
+                            onlineUsers += '</div></li>';
+
+                            $('#usersdata').append(onlineUsers);
+                        }
+
+                    }
+                });
+
+
+                var usuario = users.find(u => u.username == user)
+                if (usuario.inCall == false) {
+                    limparChat();
+                }
+            });
+
+
+            wsconn.on('receivedatamsg', (signalingUser, data) => {
+                var horaAtual = new Date().toLocaleTimeString();
+
+                var msg = data.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
+
+
+                var msgem = `
+                                                        <div class="chat-message-left pb-4 chatHub">
+                                <div>
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                    <div class="text-muted small text-nowrap mt-2">${horaAtual}</div>
+                                </div>
+                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                    <div class="font-weight-bold mb-1">Sharon Lessman</div>
+                                            ${msg}
+                                </div>
+                            </div>
+                                                `
+
+                $("#Chatmesseger").append(msgem);
+                scrollToBottom('Chatmesseger')
+
+            }
+            )
+
+            wsconn.on('LidacaoNegada', (callingUser, msg) => {
+                console.info('Ligação negada: ' + JSON.stringify(callingUser));
+                playAudio("MyAudio", 'stop')
+                playAudio("AudioReceive", 'stop')
+                alert("Ligação negada: " + msg)
+            });
+
+            // onde dispara a ligação recebida e salvo o user na variavel "caller"
+            wsconn.on('ChamadaRecebida', (callingUser) => {
+                console.info('Chamada Recebida de: ' + JSON.stringify(callingUser));
+                caller = callingUser;
+
+                playAudio("AudioReceive", 'play')
+                $('#callmodal').attr('data-callinguser', `${callingUser.username}`);
+                $('#callmodal .modal-body').text(`${callingUser.username} Está ligando...`);
+                $('#callmodal').modal('show');
+                //acceptCall();
+            });
+
+
+
+            wsconn.on('LigacaoDesligada', (acceptingUser) => {
+                playAudio("MyAudio", 'stop')
+                playAudio("AudioReceive", 'stop')
+                closeConnection(caller.connectionId);
+            });
+
+
+            $('#BtnLigar').on('click', () => {
+                let id = $('#inputIdLigar').val()
+
+                if (!id) {
+                    SweetAlerta.fire({
+                        title: 'Coloque o ID',
+                        text: "Não colocou o id de quem vai ligar",
+                        icon: 'warning',
+                        showCancelButton: false,
+                        confirmButtonText: 'Entendi',
+                        cancelButtonText: 'No, cancel!',
+                        reverseButtons: true
+                    })
+
+                }
+                else {
+                    callUser(id)
+                }
+
+
+            }) // metodo de ligar pelo butom
+
+            wsconn.on("ReceberMensagem", function (mensagem) {
+                alert(`Mensagem recebida: ${mensagem}`)
+            })
+
+            $("#formchjat").on("submit", (event) => {
+
+                var valueMsg = $("#ChatConversa").val();
+                var horaAtual = new Date().toLocaleTimeString();
+                var mensagem = `   <div class="chat-message-right pb-4 chatHub">
+                                                                                                <div>
+                                                                                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                                                                                    <div class="text-muted small text-nowrap mt-2">${horaAtual}</div>
+                                                                                                </div>
+                                                                                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                                                                                    <div class="font-weight-bold mb-1">You</div>
+                                                                                                            ${valueMsg}
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                                            `
+
+                $("#Chatmesseger").append(mensagem);
+                scrollToBottom('Chatmesseger')
+
+                $('#formchjat').each(function () {
+                    this.reset();
+                });
+
+                wsconn.invoke("senddatamsg", valueMsg, caller.connectionId).catch(function (err) {
+                    return console.error(err.toString());
+                });
+                event.preventDefault();
+            });
+
+
+            $("#file-upload-form").submit(function (event) {
+                event.preventDefault();
+
+                var formData = new FormData($(this)[0]);
+                var file = formData.get("pdfFile");
+
+                if (file.size === 0) {
+                    alert('File is empty, please select a non-empty file.');
+                    return;
+                }
+
+                //send file size and file name as comma separated value.
+                dataChannel.send(file.size + ',' + file.name);
+
+                const chunkSize = 16384;
+                fileReader = new FileReader();
+                let offset = 0;
+                fileReader.addEventListener('error', error => console.error('Error reading file:', error));
+                fileReader.addEventListener('abort', event => console.log('File reading aborted:', event));
+                fileReader.addEventListener('load', e => {
+                    console.log('FileRead.onload ', e);
+                    dataChannel.send(e.target.result);
+                    offset += e.target.result.byteLength;
+                    if (offset < file.size) {
+                        readSlice(offset);
+                    } else {
+                        alert(`${file.name} Arquivo enviado com sucesso.`);
+
+                    }
+                });
+                const readSlice = o => {
+                    console.log('readSlice ', o);
+                    const slice = file.slice(offset, o + chunkSize);
+                    fileReader.readAsArrayBuffer(slice);
+                };
+                readSlice(0);
+
+                $('#file-upload-form').each(function () {
+                    this.reset();
+                });
+            });
+        })// final document ready
+
+    </script>
+
+}

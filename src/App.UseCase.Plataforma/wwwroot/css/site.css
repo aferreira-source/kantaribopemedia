@@ -29,3 +29,42 @@ body {
 .border-bottom {
     padding-bottom: 15px;
 }
+
+
+#video-publicado {
+    min-width: 100%;
+    min-height: 100%;
+    max-width: 35%;
+    max-height: 35%;
+    width: auto;
+    height: auto;
+    padding-bottom: 15px;
+    z-index: -100;
+}
+
+.conteudo {
+
+    left: 0;
+    z-index: 100;
+    background-color: white;
+    min-height: 100%;
+}
+
+#div-linha-card {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#div-lives {
+    top: 300px;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    padding-left: 20px;
+}
+
+.container {
+    padding: 15px;
+}

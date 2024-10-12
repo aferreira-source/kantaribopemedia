@@ -4,7 +4,6 @@ using app.plataforma.Handlers.Hubs;
 using app.plataforma.Identity;
 using app.plataforma.Interfaces;
 using app.plataforma.Services;
-using App.UseCase.Plataforma;
 using AspNetCore.Identity.Mongo;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -40,7 +39,8 @@ builder.Services.AddSingleton<MongoDBContext>(serviceProvider =>
     return new MongoDBContext(settings.ConnectionString, settings.DatabaseName);
 });
 
-builder.Services.AddSingleton<IMongoClient>(_ => {
+builder.Services.AddSingleton<IMongoClient>(_ =>
+{
     var connectionString =
         builder
             .Configuration
@@ -55,14 +55,11 @@ builder.Services.AddScoped<IPostagensService, PostagensService>();
 builder.Services.AddScoped<IFavoritosService, FavoritosService>();
 builder.Services.AddScoped<IUsuarioPostagem, UsuarioPostagem>();
 
-
+//3 elementos
 builder.Services.AddSingleton<List<User>>();
 builder.Services.AddSingleton<List<Connection>>();
 builder.Services.AddSingleton<List<Call>>();
 
-builder.Services.AddSingleton<List<UserAutomatic>>();
-builder.Services.AddSingleton<List<ConnectionAutomatic>>();
-builder.Services.AddSingleton<List<CallAutomatic>>();
 
 var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
 
@@ -128,17 +125,10 @@ app.MapControllerRoute(
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<HubAutomatico>("/HubAutomatico", options =>
+    endpoints.MapHub<LiveHub>("/live", options =>
     {
         options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
     });
-  
-    endpoints.MapHub<MyHub>("/cnnctn", options =>
-    {
-        options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
-    });
-
-  
 });
 
 app.Run();

@@ -63,6 +63,7 @@ const intervalHandle = setInterval(() => {
 
 
 btnOpenCamera.onclick = function () {
+    
     var state = btnOpenCamera.getAttribute('data-state')
     if (state === 'opened') {
         var stream = video.srcObject;
@@ -94,6 +95,7 @@ btnOpenCamera.onclick = function () {
 };
 
 btnClose.onclick = function () {
+    
     if (!socket || socket.readyState !== WebSocket.OPEN) {
         alert("WebSocket not connected.");
     }
@@ -189,4 +191,3 @@ const htmlEscape = (str) => {
         .replace(/'/g, '&#39;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
-}

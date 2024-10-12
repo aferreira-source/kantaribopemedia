@@ -1,3 +1,5 @@
+
+
 const getConnection = (partnerClientId) => {
     console.log("WebRTC: called getConnection");
     if (connections[partnerClientId]) {
@@ -147,17 +149,6 @@ const initiateOffer = (partnerClientId, stream) => {
             }, 5000);
         }).catch(err => console.error('WebRTC: Error while setting local description', err));
     }).catch(err => console.error('WebRTC: Error while creating offer', err));
-
-    //connection.createOffer((desc) => { // send an offer for a connection
-    //    console.log('WebRTC: created Offer: ');
-    //    console.log('WebRTC: Description after offer: ', JSON.stringify(desc));
-    //    connection.setLocalDescription(desc, () => {
-    //        console.log('WebRTC: Description after setting locally: ', JSON.stringify(desc));
-    //        console.log('WebRTC: set Local Description: ');
-    //        console.log('connection.localDescription: ', JSON.stringify(connection.localDescription));
-    //        sendHubSignal(JSON.stringify({ "sdp": connection.localDescription }), partnerClientId);
-    //    });
-    //}, errorHandler);
 }
 
 sendHubSignal = (candidate, partnerClientId) => {
@@ -167,25 +158,16 @@ sendHubSignal = (candidate, partnerClientId) => {
 };
 
 const receivedCandidateSignal = (connection, partnerClientId, candidate) => {
-    //console.log('candidate', candidate);
-    //if (candidate) {
+ 
     console.log('WebRTC: adding full candidate');
     connection.addIceCandidate(new RTCIceCandidate(candidate), () => console.log("WebRTC: added candidate successfully"), () => console.log("WebRTC: cannot add candidate"));
-    //} else {
-    //    console.log('WebRTC: adding null candidate');
-    //   connection.addIceCandidate(null, () => console.log("WebRTC: added null candidate successfully"), () => console.log("WebRTC: cannot add null candidate"));
-    //}
-}
+   
 
 const newSignal = (partnerClientId, data) => {
     console.log('WebRTC: called newSignal');
-    //console.log('connections: ', connections);
 
     var signal = JSON.parse(data);
     var connection = getConnection(partnerClientId);
-    //console.log("signal: ", signal);
-    //console.log("signal: ", signal.sdp || signal.candidate);
-    //console.log("partnerClientId: ", partnerClientId);
     console.log("connection: ", connection);
 
     // Route signal based on type
@@ -255,4 +237,4 @@ const errorHandler = (error) => {
         alertify.alert('<h4>Error Occurred</h4></br>Error Info: ' + JSON.stringify(error));
 
     consoleLogger(error);
-};
+}

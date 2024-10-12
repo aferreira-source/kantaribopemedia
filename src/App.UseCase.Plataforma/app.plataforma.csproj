@@ -11,6 +11,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9647e9be-073b-4b50-946e-068e4757569a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,10 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="8.0.8" />
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.28.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+    <PackageReference Include="mongocsharpdriver" Version="2.29.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.29.0" />
+    <PackageReference Include="MongoDB.Driver.GridFS" Version="2.29.0" />
     <PackageReference Include="MongoDbGenericRepository" Version="1.6.1" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
   </ItemGroup>
