@@ -49,16 +49,25 @@ builder.Services.AddSingleton<IMongoClient>(_ =>
     return new MongoClient(connectionString);
 });
 
+var azureStorage = builder.Configuration.GetSection("AzureStorage").Get<AzureStorage>();
+
+builder.Services.AddSingleton<AzureStorage>(azureStorage);
 
 //inject
 builder.Services.AddScoped<IPostagensService, PostagensService>();
 builder.Services.AddScoped<IFavoritosService, FavoritosService>();
 builder.Services.AddScoped<IUsuarioPostagem, UsuarioPostagem>();
 
+builder.Services.AddScoped<IBlobService, BlobService>();
+
 //3 elementos
 builder.Services.AddSingleton<List<User>>();
 builder.Services.AddSingleton<List<Connection>>();
 builder.Services.AddSingleton<List<Call>>();
+
+builder.Services.AddSingleton<List<Call>>();
+
+
 
 
 var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();

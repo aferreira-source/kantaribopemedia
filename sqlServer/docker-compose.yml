@@ -1,0 +1,19 @@
+version: '3.4'
+services:
+  sqlserver:
+    container_name: splugin-sqlserver-db    
+    image: 'mcr.microsoft.com/mssql/server:2022-latest'
+    hostname: splugin-sqlserver-db
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: 'Password123'
+      MSSQL_PID: 'Express'
+    ports:
+      - '1433:1433'
+      
+    restart: always
+    volumes:
+      - ./volumes/datasql:/var/opt/mssql/data    
+      - "./script.sql:/docker-entrypoint-initdb.d/1.sql"      
+      
+      

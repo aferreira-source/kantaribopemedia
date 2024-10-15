@@ -37,6 +37,7 @@ public class UsuarioPostagem : IUsuarioPostagem
     /// <returns></returns>
     public async Task<IEnumerable<Postagens>> ObterPostagemAsync()
     {
+
         return await _postagensService.ObterPostagens();
     }
 

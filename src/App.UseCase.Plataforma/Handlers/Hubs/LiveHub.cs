@@ -324,15 +324,21 @@ public class LiveHub : Hub<IConnectionHub>
     {
 
     }
-    public async Task Publicar(string video)
+    public async Task Publicar(object video)
     {
-        var totalCaracters = video.Length;
+        //var totalCaracters = video.Length;
+        var x = video;
+
+
         var postagem = new Postagens()
         {
             usuarioid = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
+
+            usuario = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value,
             titulo = "Primeiro video",
             descricao = "Descrição bablablbalbalbalblalbaaaaaaaaaaalballllllllllllllll",
-            arquivoUpload = video,
+            arquivoBlob = video,
+            //arquivoUpload = video,
             dtHora_Publicacao = DateTime.Now,
             tipo = 1
         };

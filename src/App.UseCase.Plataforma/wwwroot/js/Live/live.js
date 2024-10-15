@@ -9,7 +9,7 @@ const recordedVideo = document.querySelector('video#recorded');
 const recordButton = document.querySelector('button#record');
 
 recordButton.addEventListener('click', () => {
-  debugger;
+  
     if (recordButton.textContent === 'Iniciar')
     {
       startRecording();
@@ -26,21 +26,24 @@ recordButton.addEventListener('click', () => {
 const publicarButton = document.querySelector('button#publicar');
 
 
-publicarButton.addEventListener('click', () => {
-
-    debugger;
- 
-    const mimeType = codecPreferences.options[codecPreferences.selectedIndex].value.split(';', 1)[0];    
+publicarButton.addEventListener('click', () =>
+{ 
+  
+    const mimeType = "video/mp4";
     const blob = new Blob(recordedBlobs, { type: mimeType });
     let reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onloadend = function () {
         let base64String = reader.result;
+    //    wsconn.invoke("publicar", base64String).catch(function (err) {
+    //        alert(err.toString());
+        //    });  
         wsconn.invoke("publicar", base64String).catch(function (err) {
             alert(err.toString());
         });  
+
     };   
-  
+   
 
       //const url = window.URL.createObjectURL(blob);
       //const a = document.createElement('a');
@@ -77,9 +80,8 @@ function getSupportedMimeTypes() {
   });
 }
 
-async function startRecording() {
-
-    debugger;
+async function startRecording()
+{ 
     //inicio da live
     const hasEchoCancellation = false;//document.querySelector('#echoCancellation').checked;
 

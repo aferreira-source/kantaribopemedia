@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace app.plataforma.Controllers;
 
@@ -17,20 +18,31 @@ public class PostagensController : Controller
     private readonly IUsuarioPostagem _usuarioPostagem;
     private UserManager<ApplicationUser> userManager;
     private RoleManager<ApplicationRole> roleManager;
+    private IHttpContextAccessor _httpContextAccessor;
 
     public PostagensController(ILogger<PostagensController> logger,
         IPostagensService postagensService,
         IUsuarioPostagem usuarioPostagem,
         UserManager<ApplicationUser> userManager,
-        RoleManager<ApplicationRole> roleManager)
+        RoleManager<ApplicationRole> roleManager,
+        IHttpContextAccessor httpContextAccessor)
     {
         this.userManager = userManager;
         this.roleManager = roleManager;
         _logger = logger;
         _postagensService = postagensService;
         _usuarioPostagem = usuarioPostagem;
+        _httpContextAccessor = httpContextAccessor;
     }
 
+
+
+    public async Task<IActionResult> MinhasPostagens()
+    {
+        var usuarioid = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var model = await _postagensService.ObterTodosPorIdUsuarioAsync(usuarioid);
+        return View(model);
+    }
 
     public IActionResult Video(string ConectId)
     {

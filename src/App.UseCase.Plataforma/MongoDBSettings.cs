@@ -1,8 +1,8 @@
-﻿namespace app.plataforma
+﻿namespace app.plataforma;
+
+public class MongoDBSettings
 {
-    public class MongoDBSettings
-    {
-        public string? ConnectionString { get; set; }
-        public string? DatabaseName { get; set; }      
-    }    
+    public string? ConnectionString { get; set; }
+    public string? DatabaseName { get; set; }
 }
+

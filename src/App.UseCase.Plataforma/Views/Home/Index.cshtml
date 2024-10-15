@@ -20,13 +20,10 @@
                                             <h2 class="mt-0 mb-1">@postagens.titulo</h2>
 
                                             <video id="video-publicado" controls="true">
-                                                <source src='@postagens.arquivoUpload' type="video/mp4" loop>
-                                            </video> 
+                                                <source src="~/upload/@postagens.nomeArquivo" type="video/mp4" loop>
+                                            </video>
 
-
-                                      
-                                        
-
+                                            <h6 class="mt-0 mb-1"><b>ArquivoId</b>@postagens.arquivoId</h6>
 
                                             <h6 class="mt-0 mb-1"><b>Publicação:&nbsp;</b>@postagens.dtHora_Publicacao</h6>
                                             <h6 class="mt-0 mb-2"><b>Autor:&nbsp;</b>@postagens.usuario</h6>

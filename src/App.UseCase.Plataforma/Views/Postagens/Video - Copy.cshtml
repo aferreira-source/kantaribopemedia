@@ -1,0 +1,190 @@
+﻿<style>
+
+    .fixed-size-div {
+        height: 100px;
+        overflow-y: auto;
+    }
+
+</style>
+
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-8">
+
+            <div id="container">
+                <h1>Video Recorder</h1>
+                <p>
+                    This page allows you to record video from your camera and save it in mp4/h.264 format. At the moment it is intended to work
+                    for Chrome, Firefox and Microsoft Edge. Note: there is no limit for the amount of time you record. Everything is leveraged
+                    by the web browser. No plugins are required.
+                </p>
+                <p>
+                    Note: this video recorder works properly with the latest versions of Chrome, Firefox and Microsoft Edge. Internet Explorer
+                    11 does not support WebRTC, hence this demo will not work there.
+                    <a href="https://html5test.com/compare/browser/ie-11/chrome-64/firefox/edge.html"
+                       target="_blank">https://html5test.com/compare/browser/ie-11/chrome-64/firefox/edge.html</a>
+                </p>
+                <label id="lblUser"></label>
+                <table>
+                    <tr>
+                        <td>
+                            <label for="videoSource">
+                                Video Source
+                                <select name="" id="videoSource"></select>
+                            </label>
+                        </td>
+                        <td style="display:none;">
+                            <label for="audioSource">
+                                Audio Source
+                                <select name="" id="audioSource"></select>
+                            </label>
+                        </td>
+                        <td>
+                    </tr>
+
+
+                </table>
+                <div id="videoMain">
+                    <video muted autoplay id="videoContainer"></video>
+                </div>
+                <div id="videoPreview" style="display:none">
+                    <input type="hidden" name="videoBitrate" id="videoBitrate" value="4000000">
+                    <input type="hidden" name="audioBitrate" id="audioBitrate" value="320000">
+                    <video controls id="recordedVideo"></video>
+                    <button id="play" disabled>Play</button>
+                </div>
+                <div class="log"></div>
+
+                <div>
+                    <button id="record" disabled>Start Recording</button>
+                    <button id="preview" disabled>See Recording</button>
+                    <button id="download" disabled>Download</button>
+                </div>
+            </div>
+
+         
+        </div>
+        <div class="col-sm-4">
+            <div class="card card-body bg-light">
+                <ul id="usersdata" class="list-group fixed-size-div">
+                    <li class="list-group-item">Usuarios Online</li>
+                </ul>
+                </<div>
+                </div>
+            </div>               
+
+        </div>
+</div>
+
+
+@section Scripts
+{
+    @* <script src="~/js/variaveis.js"></script>
+    <script src="~/js/live/live-chat.js"></script>
+    <script src="~/js/live/live-funcoes.js"></script>
+    <script src="~/js/live/live.js"></script> *@
+        <script src="~/js/live/video.js"></script>
+
+
+    <script>
+        'use strict';
+
+
+        var hubUrl = document.location.origin + '/live';
+        var wsconn = new signalR.HubConnectionBuilder()
+            .withUrl(hubUrl, signalR.HttpTransportType.WebSockets)
+            .configureLogging(signalR.LogLevel.Debug)
+            .build();
+ 
+        var IdConecçao = null
+
+        var peerConnection = null //instancia o webRTC
+        var users = [], localStream, connections = {};
+        var user = null;
+        var caller = null;
+
+
+        $(document).ready(function () {           
+
+            wsconn.start().then(() => {
+
+                debugger;
+                //askUsername()
+                //initializeUserMedia() // ligo a cam
+
+                IdConecçao = wsconn.connection.connectionId
+                console.info(`Connected as ${user}`);
+              //  $("#lblUser").value(user.askUsername);
+
+            }).catch(err => console.error(err));            
+
+            
+            wsconn.on('AttUsuariosOnline', (userList) => {
+                debugger;
+                console.info('Check online users...' + JSON.stringify(userList));
+                users = userList;
+
+                $('#usersdata li.usuarios').remove();
+
+                $.each(userList, function (index) {
+
+                    debugger;
+
+                    var userIcon = '', status = '';
+                            //alert('meu ' + userList[index].username + ' ' + wsconn.connection.connectionId);
+
+                    // if (userList[index].username === $("#lblUser").text()) {
+                            if (userList[index].connectionId === wsconn.connection.connectionId) {
+
+                    } else {
+
+
+                        if (userList[index].username !== user) {
+                       
+                            var onlineUsers = '';
+                            onlineUsers += '<li class="list-group-item usuarios" data-username=' + userList[index].username + '>';
+                            onlineUsers += '<div class="d-lg-flex flex-row">';
+                            onlineUsers += '<div class="m-1 d-lg-flex justify-content-center align-items-center">' + userList[index].username + '</div>';
+                            onlineUsers += '<div class="d-flex flex-row justify-content-center align-items-center">';
+                            onlineUsers += '</div>';
+
+                            onlineUsers += '</div></li>';
+
+                            $('#usersdata').append(onlineUsers);
+                        }
+
+                    }
+                });
+
+
+               
+            });        
+
+         
+
+            // onde dispara a ligação recebida e salvo o user na variavel "caller"
+            wsconn.on('ChamadaRecebida', (callingUser) => {
+                console.info('Chamada Recebida de: ' + JSON.stringify(callingUser));
+                caller = callingUser;
+
+                playAudio("AudioReceive", 'play')
+                $('#callmodal').attr('data-callinguser', `${callingUser.username}`);
+                $('#callmodal .modal-body').text(`${callingUser.username} Está ligando...`);
+                $('#callmodal').modal('show');
+                //acceptCall();
+            });
+
+
+
+            wsconn.on('LigacaoDesligada', (acceptingUser) => {
+                playAudio("MyAudio", 'stop')
+                playAudio("AudioReceive", 'stop')
+                closeConnection(caller.connectionId);
+            });          
+                    
+        })// final document ready
+
+    </script>
+}

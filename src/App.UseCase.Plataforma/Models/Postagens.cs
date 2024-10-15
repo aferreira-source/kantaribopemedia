@@ -1,5 +1,4 @@
-﻿using app.plataforma.Interfaces;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace app.plataforma;
@@ -24,10 +23,14 @@ public class Postagens
     [BsonIgnore]
     public string? arquivoUpload { get; set; }
 
+
+
+    [BsonIgnore]
+    public Object? arquivoBlob { get; set; }
+
+
     [BsonElement("arquivoId")]
     public ObjectId? arquivoId { get; set; }
-
-
 
     [BsonElement("nomeArquivo")]
     public string? nomeArquivo { get; set; }
@@ -37,17 +40,8 @@ public class Postagens
     [BsonElement("dtHora_Expiracao")]
     public DateTime? dtHora_Expiracao { get; set; }
     [NotMapped]
-    public string usuario { get; set; }
+    public string? usuario { get; set; }
 
-    private readonly IPostagensService _postagensService;
-    private Postagens(IPostagensService postagensService)
-    {
-        _postagensService = postagensService;
-    }
-
-    public Postagens()
-    {
-    }
 }
 
 

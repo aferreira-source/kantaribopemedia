@@ -86,13 +86,8 @@
         var caller = null;
 
 
-        $(document).ready(function () {
-
-           
-
-            wsconn.start().then(() => {
-
-                debugger;
+        $(document).ready(function () {          
+            wsconn.start().then(() => {           
                 askUsername()
                 initializeUserMedia() // ligo a cam
 
@@ -104,7 +99,7 @@
 
             
             wsconn.on('AttUsuariosOnline', (userList) => {
-                debugger;
+               
                 console.info('Check online users...' + JSON.stringify(userList));
                 users = userList;
 
@@ -112,7 +107,7 @@
 
                 $.each(userList, function (index) {
 
-                    debugger;
+                    
 
                     var userIcon = '', status = '';
                             //alert('meu ' + userList[index].username + ' ' + wsconn.connection.connectionId);
@@ -258,47 +253,7 @@
             });
 
 
-            $("#file-upload-form").submit(function (event) {
-                event.preventDefault();
-
-                var formData = new FormData($(this)[0]);
-                var file = formData.get("pdfFile");
-
-                if (file.size === 0) {
-                    alert('File is empty, please select a non-empty file.');
-                    return;
-                }
-
-                //send file size and file name as comma separated value.
-                dataChannel.send(file.size + ',' + file.name);
-
-                const chunkSize = 16384;
-                fileReader = new FileReader();
-                let offset = 0;
-                fileReader.addEventListener('error', error => console.error('Error reading file:', error));
-                fileReader.addEventListener('abort', event => console.log('File reading aborted:', event));
-                fileReader.addEventListener('load', e => {
-                    console.log('FileRead.onload ', e);
-                    dataChannel.send(e.target.result);
-                    offset += e.target.result.byteLength;
-                    if (offset < file.size) {
-                        readSlice(offset);
-                    } else {
-                        alert(`${file.name} Arquivo enviado com sucesso.`);
-
-                    }
-                });
-                const readSlice = o => {
-                    console.log('readSlice ', o);
-                    const slice = file.slice(offset, o + chunkSize);
-                    fileReader.readAsArrayBuffer(slice);
-                };
-                readSlice(0);
-
-                $('#file-upload-form').each(function () {
-                    this.reset();
-                });
-            });
+       
         })// final document ready
 
     </script>

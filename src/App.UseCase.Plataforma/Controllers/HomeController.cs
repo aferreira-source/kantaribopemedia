@@ -49,12 +49,32 @@ public class HomeController : Controller
 
 
 
-
+    //[ResponseCache(NoStore = true, Duration = 3)]
     public async Task<IActionResult> Index()
     {
-        var model = await Task.Run(async () => _postagensService.ObterPostagens().Result);
+        var model = await _postagensService.ObterPostagens();
+        //await Task.Run(async () => _postagensService.ObterPostagens().Result);
         return View(model);
     }
+
+
+    [HttpGet("/stream/id")]
+    public async Task<IActionResult> Stream(object Id)
+    {
+        var model = await _postagensService.ObterPostagens();
+        //await Task.Run(async () => _postagensService.ObterPostagens().Result);
+        return View(model);
+    }
+
+
+
+    //public async Task<FileStreamResult> ResultStream(ObjectId id)
+    //{
+    //    var model = await _postagensService.GetFile(id);
+    //    return model;
+    //}
+
+
 
     //public async Task<IActionResult> Hub(string TargetId,IFormFile arquivo)
     //{

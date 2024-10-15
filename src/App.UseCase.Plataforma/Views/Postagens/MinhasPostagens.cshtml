@@ -1,0 +1,97 @@
+﻿@model IEnumerable<app.plataforma.Postagens>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>Minhas postagens</h1>
+
+<p>
+    <a asp-action="Create">Novo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="visually-hidden">
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th class="visually-hidden">
+                @Html.DisplayNameFor(model => model.usuarioid)
+            </th>
+            <th class="visually-hidden">
+                @Html.DisplayNameFor(model => model.dtCadastro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.descricao)
+            </th>
+            <th class="visually-hidden">
+                @Html.DisplayNameFor(model => model.tipo)
+            </th>
+            <th class="visually-hidden">
+                @Html.DisplayNameFor(model => model.arquivoUpload)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nomeArquivo)
+            </th>
+            <th class="visually-hidden">
+                @Html.DisplayNameFor(model => model.dtHora_Fim)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.dtHora_Publicacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.dtHora_Expiracao)
+            </th>
+            <th class="visually-hidden">
+                @Html.DisplayNameFor(model => model.usuario)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td class="visually-hidden">
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td class="visually-hidden">
+                @Html.DisplayFor(modelItem => item.usuarioid)
+            </td>
+                <td class="visually-hidden">
+                @Html.DisplayFor(modelItem => item.dtCadastro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.descricao)
+            </td>
+            <td class="visually-hidden">
+                @Html.DisplayFor(modelItem => item.tipo)
+            </td>
+            <td class="visually-hidden">
+                @Html.DisplayFor(modelItem => item.arquivoUpload)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nomeArquivo)
+            </td>
+         
+        
+            <td>
+                @Html.DisplayFor(modelItem => item.dtHora_Expiracao)
+            </td>
+                <td class="visually-hidden">
+                @Html.DisplayFor(modelItem => item.usuario)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -17,12 +17,13 @@
     <link href="~/lib/alertifyjs/css/themes/semantic.min.css" rel="stylesheet" />
     <link href="~/lib/alertifyjs/css/themes/semantic.rtl.css" rel="stylesheet" />
     <link href="~/lib/alertifyjs/css/themes/semantic.rtl.min.css" rel="stylesheet" />
-
     <!-- Inclui o link para o arquivo toastr.css por CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <link rel="stylesheet" href="~/App.UseCase.Plataforma.styles.css" asp-append-version="true" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -71,6 +72,9 @@
                             <a class="nav-link" asp-area="" asp-controller="Operations" asp-action="Create">Novo Usuário</a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Postagens" asp-action="MinhasPostagens">Postagens</a>
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Favoritos</a>
@@ -100,6 +104,8 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+
+            <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
         </main>
     </div>
 
