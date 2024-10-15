@@ -1,10 +1,9 @@
 ﻿using app.plataforma.Identity;
 using app.plataforma.Interfaces;
-using Azure;
+using Azure.Storage;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Text;
 
 namespace app.plataforma.Services;
 
@@ -12,37 +11,51 @@ public class BlobService : IBlobService
 {
     private readonly MongoDBContext _context;
     private UserManager<ApplicationUser> _userManager;
-    protected readonly BlobContainerClient _blobServiceClient;
+    //protected readonly BlobContainerClient _blobServiceClient;
     protected readonly AzureStorage _azureStorage;
 
-    public BlobService(MongoDBContext context, UserManager<ApplicationUser> userManager, AzureStorage azureStorage)
+    private const string ContainerName = "portal-blob";
+    public const string SuccessMessageKey = "SuccessMessage";
+    public const string ErrorMessageKey = "ErrorMessage";
+    private readonly BlobServiceClient _blobServiceClient;
+    private readonly BlobContainerClient _containerClient;
+
+    public BlobService(MongoDBContext context, UserManager<ApplicationUser> userManager,
+        AzureStorage azureStorage)
     {
         _azureStorage = azureStorage;
 
+        _containerClient = new BlobContainerClient(
+            new Uri($"{_azureStorage.Url}/{_azureStorage.BlobName}"),
+            new StorageSharedKeyCredential(_azureStorage.AccountName, _azureStorage.Signature)
+          );
+        _containerClient.CreateIfNotExists();
 
-        AzureSasCredential credential = new AzureSasCredential(_azureStorage.Chave);
-        var url = new Uri(_azureStorage.Url + @"\" + _azureStorage.BlobName);
-        _blobServiceClient = new BlobContainerClient(url, credential);
+
+        _blobServiceClient = new BlobServiceClient(
+            new Uri($"{_azureStorage.Url}/{_azureStorage.BlobName}"),
+            new StorageSharedKeyCredential(_azureStorage.AccountName, _azureStorage.Signature)
+          );
 
         _context = context;
         _userManager = userManager;
     }
 
-    public async Task<bool> UploadFile(string blob, string filename)
+    public async Task<BlobContentInfo> UploadFile(byte[] blob, string filename)
     {
-        byte[] bytes = Encoding.ASCII.GetBytes(blob);
-        Stream str = new MemoryStream(bytes);
-        Response<BlobContentInfo> blobResult = null;
-        try
-        {
-            blobResult = await _blobServiceClient.UploadBlobAsync(filename, str);
-        }
-        catch (Exception exc)
-        {
-            var message = exc.Message;
-        }
 
-        var result = blobResult.GetRawResponse().Status;
-        return true;
+        using (Stream str = new MemoryStream(blob))
+        {
+            string blobName = filename;
+            var blobClient = _containerClient.GetBlobClient(blobName);
+            var uploadOptions = new BlobUploadOptions() { HttpHeaders = new BlobHttpHeaders() { ContentType = "video/mp4" } };
+            return await blobClient.UploadAsync(str, uploadOptions);
+        }
+    }
+
+
+    public async Task<BlobContentInfo> GetPathFile(string filename)
+    {
+        return null;
     }
 }

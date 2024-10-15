@@ -24,13 +24,15 @@ public class Postagens
     public string? arquivoUpload { get; set; }
 
 
+    [BsonIgnore]
+    public string? linkFile { get; set; }//{ get { return $"http://127.0.0.1:10000/devstoreaccount1/portal-blob/{nomeArquivo}"; } }
 
     [BsonIgnore]
-    public Object? arquivoBlob { get; set; }
+    public Object? fileBlob { get; set; }
 
 
-    [BsonElement("arquivoId")]
-    public ObjectId? arquivoId { get; set; }
+    //[BsonElement("arquivoId")]
+    //public ObjectId? arquivoId { get; set; }
 
     [BsonElement("nomeArquivo")]
     public string? nomeArquivo { get; set; }
@@ -41,6 +43,14 @@ public class Postagens
     public DateTime? dtHora_Expiracao { get; set; }
     [NotMapped]
     public string? usuario { get; set; }
+
+    [BsonElement("bucketFileInfo")]
+    public BucketFileInfo bucketFileInfo { get; set; }
+
+    public Postagens()
+    {
+        bucketFileInfo = new BucketFileInfo();
+    }
 
 }
 

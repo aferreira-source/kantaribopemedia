@@ -12,9 +12,10 @@ public class BucketFileInfo
 
     public long FileSize { get; set; }
 
-    public BucketFileInfo(DateTime uploadTime)
+    public BucketFileInfo()
     {
-        UploadTime = uploadTime;
+        Id = ObjectId.GenerateNewId();
+        UploadTime = DateTime.Now;
     }
 }
 

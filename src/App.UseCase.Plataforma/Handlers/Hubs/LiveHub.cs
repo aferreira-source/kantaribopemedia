@@ -337,8 +337,7 @@ public class LiveHub : Hub<IConnectionHub>
             usuario = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value,
             titulo = "Primeiro video",
             descricao = "Descrição bablablbalbalbalblalbaaaaaaaaaaalballllllllllllllll",
-            arquivoBlob = video,
-            //arquivoUpload = video,
+            fileBlob = video,
             dtHora_Publicacao = DateTime.Now,
             tipo = 1
         };

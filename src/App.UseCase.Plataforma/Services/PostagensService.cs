@@ -3,11 +3,7 @@ using app.plataforma.Identity;
 using app.plataforma.Interfaces;
 using AspNetCore.Identity.Mongo.Mongo;
 using Microsoft.AspNetCore.Identity;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.GridFS;
-using System.IO.Compression;
-using System.Text;
 
 namespace app.plataforma.Services;
 
@@ -15,18 +11,24 @@ public class PostagensService : IPostagensService
 {
     private readonly MongoDBContext _context;
     private UserManager<ApplicationUser> _userManager;
-    private readonly string bucket = "BUCKET-ARQUIVOS";
-    private readonly GridFSBucket fsBucket = null;
+    //private readonly string bucket = "BUCKET-ARQUIVOS";
+    //private readonly GridFSBucket fsBucket = null;
     private readonly IWebHostEnvironment _environment;
-    public PostagensService(MongoDBContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment environment)
+    private readonly IBlobService _bloService;
+    private readonly AzureStorage _azureStorage;
+    public PostagensService(MongoDBContext context,
+        UserManager<ApplicationUser> userManager,
+        AzureStorage azureStorage,
+        IWebHostEnvironment environment,
+        IBlobService bloService)
     {
         _context = context;
         _userManager = userManager;
         _environment = environment;
-        fsBucket = new GridFSBucket(_context.Postagens.Database, new GridFSBucketOptions { BucketName = bucket });
+        //fsBucket = new GridFSBucket(_context.Postagens.Database, new GridFSBucketOptions { BucketName = bucket });
+        _azureStorage = azureStorage;
+        _bloService = bloService;
     }
-
-
 
 
     public async Task DeletarAsync(object Id)
@@ -45,11 +47,8 @@ public class PostagensService : IPostagensService
 
     public async Task InserirAsync(Postagens obj)
     {
-        var nomeArquivo = Guid.NewGuid().ToString() + ".mp4";
-        var objectId = await UploadFile(obj.arquivoBlob.ToString(), nomeArquivo);
-        obj.arquivoId = objectId;
-        //obj.arquivoUpload = nomeArquivo;
-        obj.nomeArquivo = nomeArquivo;
+        obj.nomeArquivo = string.Concat(Guid.NewGuid().ToString(), ".mp4");
+        obj.bucketFileInfo = await UploadFile(obj.fileBlob.ToString(), obj.nomeArquivo);
         await _context.Postagens.InsertOneAsync(obj);
     }
 
@@ -79,111 +78,55 @@ public class PostagensService : IPostagensService
         var lstPostagens = await _context.Postagens.Aggregate()
                     .Match(filter)
                     .SortByDescending(u => u.dtHora_Publicacao).ToListAsync();
-        foreach (var postagem in lstPostagens)
-        {
-            postagem.arquivoUpload = await GetFile(postagem.arquivoId);
-        }
 
-        //var result = lstPostagens.Select(x => { x.arquivoUpload = Task.Run(async () => GetFile(x.arquivoId).Result).Result; return x; });
-        return lstPostagens;
+        return lstPostagens.Select(x => { x.linkFile = $"{_azureStorage.Url}/{_azureStorage.BlobName}/{x.nomeArquivo}"; return x; });
     }
 
-    public byte[] Zip(string str)
+
+
+
+    public async Task<BucketFileInfo> UploadFile(string file, string savename = null)
     {
-        var bytes = Encoding.UTF8.GetBytes(str);
-
-        using (var msi = new MemoryStream(bytes))
-        using (var mso = new MemoryStream())
-        {
-            using (var gs = new GZipStream(mso, CompressionMode.Compress))
-            {
-                msi.CopyTo(gs);
-                //CopyTo(msi, gs);
-            }
-
-            return mso.ToArray();
-        }
-    }
-
-    public async Task<ObjectId> UploadFile(object blobFile, string savename = null)
-    {
-
-        byte[] textBytes = Encoding.UTF8.GetBytes(blobFile.ToString());
 
         string path = Path.Combine(_environment.WebRootPath, "upload", savename);
-
-        File.WriteAllBytes(path, textBytes);
-
-
-
-
-        if (_context.BucketFileInfo.Find(info => info.FileName.Equals(savename)).Any())
-            throw new GridFSException($"\'{savename}\' arquivo já existente");
-
-
-        //var id = await fsBucket.UploadFromBytesAsync(savename, Zip(file), new GridFSUploadOptions() { DisableMD5 = false, ChunkSizeBytes = 261120 });
-
-        var id = await fsBucket.UploadFromBytesAsync(savename, textBytes, new GridFSUploadOptions() { });
-
-        var fileInfo = new BucketFileInfo(DateTime.UtcNow)
-        {
-            Id = id,
-            FileName = savename,
-            FileSize = textBytes.Length,
-        };
-
-        _context.BucketFileInfo.InsertOne(fileInfo);
-
-        return id;
-    }
-
-
-    public async Task<ObjectId> UploadFile(string file, string savename = null)
-    {
-
-
-
-        string path = Path.Combine(_environment.WebRootPath, "upload", savename);
-
-        //File.WriteAllText(path, file.Replace("data:video/mp4;base64,", string.Empty));
 
         string base64data = file.Replace("data:video/mp4;base64,", string.Empty);
         base64data = base64data.Replace("data:video/mp4;ogg;base64,", string.Empty);
         byte[] ret = Convert.FromBase64String(base64data);
 
-        await File.WriteAllBytesAsync(path, ret);
+        var rest = await _bloService.UploadFile(ret, savename);
 
-
-        if (_context.BucketFileInfo.Find(info => info.FileName.Equals(savename)).Any())
-            throw new GridFSException($"\'{savename}\' arquivo já existente");
-
+        return new BucketFileInfo()
+        {
+            FileName = savename,
+            FileSize = ret.Length
+        };
 
         //var id = await fsBucket.UploadFromBytesAsync(savename, Zip(file), new GridFSUploadOptions() { DisableMD5 = false, ChunkSizeBytes = 261120 });
 
-        byte[] textBytes = Encoding.ASCII.GetBytes(file);
-        var id = await fsBucket.UploadFromBytesAsync(savename, ret, new GridFSUploadOptions() { });
+        //byte[] textBytes = Encoding.ASCII.GetBytes(file);
+        //var id = await fsBucket.UploadFromBytesAsync(savename, ret, new GridFSUploadOptions() { });
 
-        var fileInfo = new BucketFileInfo(DateTime.UtcNow)
-        {
-            Id = id,
-            FileName = savename,
-            FileSize = textBytes.Length,
-        };
+        //var fileInfo = new BucketFileInfo(DateTime.UtcNow)
+        //{
+        //    Id = id,
+        //    FileName = savename,
+        //    FileSize = textBytes.Length,
+        //};
 
-        _context.BucketFileInfo.InsertOne(fileInfo);
+        //_context.BucketFileInfo.InsertOne(fileInfo);
 
-        return id;
     }
 
-    public async Task<string> GetFile(ObjectId? id)
-    {
-        var bucketFileInfo = _context.BucketFileInfo.Find(fileInfo => fileInfo.Id.Equals(id));
-        var result = string.Empty;
+    //public async Task<string> GetFile(ObjectId? id)
+    //{
+    //    var bucketFileInfo = _context.BucketFileInfo.Find(fileInfo => fileInfo.Id.Equals(id));
+    //    var result = string.Empty;
 
-        if (bucketFileInfo.Any())
-            result = System.Text.Encoding.Default.GetString(fsBucket.DownloadAsBytes(id));
-        return result;
-    }
+    //    if (bucketFileInfo.Any())
+    //        result = System.Text.Encoding.Default.GetString(fsBucket.DownloadAsBytes(id));
+    //    return result;
+    //}
 
 
 

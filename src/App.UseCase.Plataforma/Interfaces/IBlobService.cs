@@ -1,7 +1,9 @@
-﻿namespace app.plataforma.Interfaces;
+﻿using Azure.Storage.Blobs.Models;
+
+namespace app.plataforma.Interfaces;
 
 public interface IBlobService
 {
-    Task<bool> UploadFile(string blob, string filename);
+    Task<BlobContentInfo> UploadFile(byte[] blob, string filename);
 
 }

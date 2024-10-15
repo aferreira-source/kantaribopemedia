@@ -5,6 +5,8 @@ using app.plataforma.Identity;
 using app.plataforma.Interfaces;
 using app.plataforma.Services;
 using AspNetCore.Identity.Mongo;
+using Azure;
+using Azure.Storage.Blobs;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -67,8 +69,9 @@ builder.Services.AddSingleton<List<Call>>();
 
 builder.Services.AddSingleton<List<Call>>();
 
-
-
+AzureSasCredential credential = new AzureSasCredential(azureStorage.Signature);
+Uri uri = new Uri(azureStorage.Url);
+builder.Services.AddSingleton(x => new BlobServiceClient(uri, credential));
 
 var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
 
