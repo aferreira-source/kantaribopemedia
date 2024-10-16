@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace app.plataforma.Services;
 
-public class BlobService : IBlobService
+public class AzureBlobService : IAzureBlobService
 {
     private readonly MongoDBContext _context;
     private UserManager<ApplicationUser> _userManager;
@@ -20,7 +20,7 @@ public class BlobService : IBlobService
     private readonly BlobServiceClient _blobServiceClient;
     private readonly BlobContainerClient _containerClient;
 
-    public BlobService(MongoDBContext context, UserManager<ApplicationUser> userManager,
+    public AzureBlobService(MongoDBContext context, UserManager<ApplicationUser> userManager,
         AzureStorage azureStorage)
     {
         _azureStorage = azureStorage;

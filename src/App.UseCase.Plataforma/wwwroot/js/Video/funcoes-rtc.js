@@ -1,5 +1,8 @@
 
 
+
+
+
 const getConnection = (partnerClientId) => {
     console.log("WebRTC: called getConnection");
     if (connections[partnerClientId]) {
@@ -92,7 +95,8 @@ function onReceiveMessageCallback() {
     };
 }
 
-const callbackIceCandidate = (evt, connection, partnerClientId) => {
+const callbackIceCandidate = (evt, connection, partnerClientId) =>
+{
     console.log("WebRTC: Ice Candidate callback");
     //console.log("evt.candidate: ", evt.candidate);
     if (evt.candidate) {// Found a new candidate
@@ -105,7 +109,10 @@ const callbackIceCandidate = (evt, connection, partnerClientId) => {
         sendHubSignal(JSON.stringify({ "candidate": null }), partnerClientId);
     }
 }
-const callbackAddStream = (connection, evt) => {
+
+
+const callbackAddStream = (connection, evt) =>
+{
     console.log('WebRTC: called callbackAddStream');
 
     // Bind the remote stream to the partner window
@@ -114,7 +121,8 @@ const callbackAddStream = (connection, evt) => {
     attachMediaStream(evt);
 }
 
-attachMediaStream = (e) => {
+attachMediaStream = (e) =>
+{
     //console.log(e);
     console.log("OnPage: called attachMediaStream");
   
@@ -124,13 +132,15 @@ attachMediaStream = (e) => {
     }
 };
 
-const callbackRemoveStream = (connection, evt) => {
+const callbackRemoveStream = (connection, evt) =>
+{
     console.log('WebRTC: removing remote stream from partner window');
 
     partnerAudio.src = null;
 }
 
-const initiateOffer = (partnerClientId, stream) => {
+const initiateOffer = (partnerClientId, stream) =>
+{
     console.log('WebRTC: called initiateoffer: ');
     var connection = getConnection(partnerClientId); // // get a connection for the given partner
 
@@ -151,90 +161,96 @@ const initiateOffer = (partnerClientId, stream) => {
     }).catch(err => console.error('WebRTC: Error while creating offer', err));
 }
 
-sendHubSignal = (candidate, partnerClientId) => {
+sendHubSignal = (candidate, partnerClientId) =>
+{
     console.log('candidate', candidate);
     console.log('SignalR: called sendhubsignal ');
     wsconn.invoke('sendSignal', candidate, partnerClientId).catch(errorHandler);
 };
 
-const receivedCandidateSignal = (connection, partnerClientId, candidate) => {
- 
+const receivedCandidateSignal = (connection, partnerClientId, candidate) =>
+{
+
     console.log('WebRTC: adding full candidate');
     connection.addIceCandidate(new RTCIceCandidate(candidate), () => console.log("WebRTC: added candidate successfully"), () => console.log("WebRTC: cannot add candidate"));
-   
 
-const newSignal = (partnerClientId, data) => {
-    console.log('WebRTC: called newSignal');
 
-    var signal = JSON.parse(data);
-    var connection = getConnection(partnerClientId);
-    console.log("connection: ", connection);
+    const newSignal = (partnerClientId, data) => {
+        console.log('WebRTC: called newSignal');
 
-    // Route signal based on type
-    if (signal.sdp) {
-        console.log('WebRTC: sdp signal');
-        receivedSdpSignal(connection, partnerClientId, signal.sdp);
-    } else if (signal.candidate) {
-        console.log('WebRTC: candidate signal');
-        receivedCandidateSignal(connection, partnerClientId, signal.candidate);
-    } else {
-        console.log('WebRTC: adding null candidate');
-        connection.addIceCandidate(null, () => console.log("WebRTC: added null candidate successfully"), () => console.log("WebRTC: cannot add null candidate"));
+        var signal = JSON.parse(data);
+        var connection = getConnection(partnerClientId);
+        console.log("connection: ", connection);
+
+        // Route signal based on type
+        if (signal.sdp) {
+            console.log('WebRTC: sdp signal');
+            receivedSdpSignal(connection, partnerClientId, signal.sdp);
+        } else if (signal.candidate) {
+            console.log('WebRTC: candidate signal');
+            receivedCandidateSignal(connection, partnerClientId, signal.candidate);
+        } else {
+            console.log('WebRTC: adding null candidate');
+            connection.addIceCandidate(null, () => console.log("WebRTC: added null candidate successfully"), () => console.log("WebRTC: cannot add null candidate"));
+        }
     }
-}
 
-const receivedSdpSignal = (connection, partnerClientId, sdp) => {
-    console.log('connection: ', connection);
-    console.log('sdp', sdp);
-    console.log('WebRTC: called receivedSdpSignal');
-    console.log('WebRTC: processing sdp signal');
-    connection.setRemoteDescription(new RTCSessionDescription(sdp), () => {
-        console.log('WebRTC: set Remote Description');
-        if (connection.remoteDescription.type == "offer") {
-            console.log('WebRTC: remote Description type offer');
-          //  connection.addStream(localstream);
-            console.log('WebRTC: added stream');
-            connection.createAnswer().then((desc) => {
-                console.log('WebRTC: create Answer...');
-                connection.setLocalDescription(desc, () => {
-                    console.log('WebRTC: set Local Description...');
-                    console.log('connection.localDescription: ', connection.localDescription);
-                    setTimeout(() => {
-                    sendHubSignal(JSON.stringify({ "sdp": connection.localDescription }), partnerClientId);
-                    }, 1000);
+    const receivedSdpSignal = (connection, partnerClientId, sdp) => {
+        console.log('connection: ', connection);
+        console.log('sdp', sdp);
+        console.log('WebRTC: called receivedSdpSignal');
+        console.log('WebRTC: processing sdp signal');
+        connection.setRemoteDescription(new RTCSessionDescription(sdp), () => {
+            console.log('WebRTC: set Remote Description');
+            if (connection.remoteDescription.type == "offer") {
+                console.log('WebRTC: remote Description type offer');
+                //  connection.addStream(localstream);
+                console.log('WebRTC: added stream');
+                connection.createAnswer().then((desc) => {
+                    console.log('WebRTC: create Answer...');
+                    connection.setLocalDescription(desc, () => {
+                        console.log('WebRTC: set Local Description...');
+                        console.log('connection.localDescription: ', connection.localDescription);
+                        setTimeout(() => {
+                            sendHubSignal(JSON.stringify({ "sdp": connection.localDescription }), partnerClientId);
+                        }, 1000);
+                    }, errorHandler);
                 }, errorHandler);
-            }, errorHandler);
-        } else if (connection.remoteDescription.type == "answer") {
-            console.log('WebRTC: remote Description type answer');
-        }
-    }, errorHandler);
-}
+            } else if (connection.remoteDescription.type == "answer") {
+                console.log('WebRTC: remote Description type answer');
+            }
+        }, errorHandler);
+    }
 
 
 
 
-wsconn.on('receiveSignal', (signalingUser, signal) => {
- 
-    newSignal(signalingUser.connectionId, signal);
-});
+    wsconn.on('receiveSignal', (signalingUser, signal) => {
 
-
-//funcao para pausar a midia q vc está passando
-function setCallState() {
-    var connection = getConnection(caller.connectionId)
-    paused = !paused
-    connection.getSenders().forEach(sender => {
-        if (sender.track) {
-            sender.track.enabled = paused;
-        }
+        newSignal(signalingUser.connectionId, signal);
     });
+
+
+    //funcao para pausar a midia q vc está passando
+    function setCallState() {
+        var connection = getConnection(caller.connectionId)
+        paused = !paused
+        connection.getSenders().forEach(sender => {
+            if (sender.track) {
+                sender.track.enabled = paused;
+            }
+        });
+    }
+
+    const errorHandler = (error) => {
+        if (error.message)
+            alertify.alert('<h4>Error Occurred</h4></br>Error Info: ' + JSON.stringify(error.message));
+        else
+            alertify.alert('<h4>Error Occurred</h4></br>Error Info: ' + JSON.stringify(error));
+
+        consoleLogger(error);
+    };
+
 }
 
-const errorHandler = (error) => {
-    if (error.message)
-        alertify.alert('<h4>Error Occurred</h4></br>Error Info: ' + JSON.stringify(error.message));
-    else
-        alertify.alert('<h4>Error Occurred</h4></br>Error Info: ' + JSON.stringify(error));
 
-    consoleLogger(error);
-}

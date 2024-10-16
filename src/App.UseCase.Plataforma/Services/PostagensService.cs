@@ -14,13 +14,13 @@ public class PostagensService : IPostagensService
     //private readonly string bucket = "BUCKET-ARQUIVOS";
     //private readonly GridFSBucket fsBucket = null;
     private readonly IWebHostEnvironment _environment;
-    private readonly IBlobService _bloService;
+    private readonly IAzureBlobService _bloService;
     private readonly AzureStorage _azureStorage;
     public PostagensService(MongoDBContext context,
         UserManager<ApplicationUser> userManager,
         AzureStorage azureStorage,
         IWebHostEnvironment environment,
-        IBlobService bloService)
+        IAzureBlobService bloService)
     {
         _context = context;
         _userManager = userManager;
@@ -78,6 +78,7 @@ public class PostagensService : IPostagensService
         var lstPostagens = await _context.Postagens.Aggregate()
                     .Match(filter)
                     .SortByDescending(u => u.dtHora_Publicacao).ToListAsync();
+        var x = lstPostagens.Select(x => { x.linkFile = $"{_azureStorage.Url}/{_azureStorage.BlobName}/{x.nomeArquivo}"; return x; });
 
         return lstPostagens.Select(x => { x.linkFile = $"{_azureStorage.Url}/{_azureStorage.BlobName}/{x.nomeArquivo}"; return x; });
     }

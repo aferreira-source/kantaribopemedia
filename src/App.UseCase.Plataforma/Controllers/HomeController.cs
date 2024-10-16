@@ -25,7 +25,7 @@ public class HomeController : Controller
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
         ILogger<HomeController> logger,
-        IHubContext<LiveHub, IConnectionHub> hubContext)
+        IHubContext<VideoHub, IConnectionHub> hubContext)
     {
         _logger = logger;
         _httpContextAccessor = httpContextAccessor;

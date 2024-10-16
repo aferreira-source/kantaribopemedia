@@ -8,7 +8,7 @@ using System.Threading.Channels;
 
 namespace app.plataforma.Handlers.Hubs;
 
-public class LiveHub : Hub<IConnectionHub>
+public class VideoHub : Hub<IConnectionHub>
 {
     private readonly List<User> _users;
     private readonly List<Connection> _connections;
@@ -19,7 +19,7 @@ public class LiveHub : Hub<IConnectionHub>
     protected readonly IHttpContextAccessor _httpContextAccessor;
 
 
-    public LiveHub(List<User> users,
+    public VideoHub(List<User> users,
                    List<Connection> connections,
                    List<Call> calls,
                    IPostagensService postagensService,
@@ -35,6 +35,24 @@ public class LiveHub : Hub<IConnectionHub>
         _httpContextAccessor = httpContextAccessor;
     }
     public async Task Join(string username)
+    {
+        var currentUserName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+        var ConnectionId = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var email = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+
+        _users.Add(new User
+        {
+            Username = currentUserName,
+            ConnectionId = Context.ConnectionId,
+            Email = email,
+        });
+
+        await UpdateOnlineUsers();
+    }
+
+
+    public async Task SetUser()
     {
         var currentUserName = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
         var ConnectionId = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;

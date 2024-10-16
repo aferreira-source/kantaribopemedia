@@ -1,4 +1,5 @@
-﻿const sendSignal = (candidate, partnerClientId) => {
+﻿
+const sendSignal = (candidate, partnerClientId) => {
     hubConnection.invoke('sendData', candidate, partnerClientId).catch(err => console.error(err));
 };
 
@@ -23,13 +24,13 @@ const declineCall = () => {
     $('#callmodal').modal('hide');
 };
 
-const userJoin = (username) => {
+const userJoin =() => {
     console.info('Joining...');
     hubConnection.invoke("Join", username).catch((err) => {
         console.error(err);
     });
 
-    $("#IdUser").text(username);
+    //$("#IdUser").text(username);
     dataStream('');
 };
 
@@ -40,94 +41,94 @@ const dataStream = (acceptingUser) => {
 };
 
 const intervalHandle = setInterval(() => {
-    let state = btnOpenCamera.getAttribute('data-state');
-    if (state === 'opened') {
-        subject.next(`${(acceptinguser) ? acceptinguser.connectionId : ''}|${getVideoFrame()}`);
-        hubConnection.stream("DownloadStream", 500)
-            .subscribe({
-                next: (item) => {
-                    console.info(item);
-                },
-                complete: () => {
+    //let state = btnOpenCamera.getAttribute('data-state');
+    //if (state === 'opened') {
+    //    subject.next(`${(acceptinguser) ? acceptinguser.connectionId : ''}|${getVideoFrame()}`);
+    //    hubConnection.stream("DownloadStream", 500)
+    //        .subscribe({
+    //            next: (item) => {
+    //                console.info(item);
+    //            },
+    //            complete: () => {
 
-                },
-                error: (err) => {
-                    console.error(err);
-                },
-            });
-    } else {
-        //subject.complete();
-    }
+    //            },
+    //            error: (err) => {
+    //                console.error(err);
+    //            },
+    //        });
+    //} else {
+    //    //subject.complete();
+    //}
 }, 500);
 
 
 
-btnOpenCamera.onclick = function () {
+//btnOpenCamera.onclick = function () {
     
-    var state = btnOpenCamera.getAttribute('data-state')
-    if (state === 'opened') {
-        var stream = video.srcObject;
-        var tracks = stream.getTracks();
+//    var state = btnOpenCamera.getAttribute('data-state')
+//    if (state === 'opened') {
+//        var stream = video.srcObject;
+//        var tracks = stream.getTracks();
 
-        for (var i = 0; i < tracks.length; i++) {
-            var track = tracks[i];
-            track.stop();
-        }
-        video.srcObject = null;
-        btnOpenCamera.setAttribute('data-state', 'closed');
-        document.getElementById('UploadStream').src = '';
-        btnOpenCamera.classList.add('btn-info');
-        btnOpenCamera.classList.remove('btn-danger');
-        btnOpenCamera.innerHTML = "Open Camera";
-    } else {
+//        for (var i = 0; i < tracks.length; i++) {
+//            var track = tracks[i];
+//            track.stop();
+//        }
+//        video.srcObject = null;
+//        btnOpenCamera.setAttribute('data-state', 'closed');
+//        document.getElementById('UploadStream').src = '';
+//        btnOpenCamera.classList.add('btn-info');
+//        btnOpenCamera.classList.remove('btn-danger');
+//        btnOpenCamera.innerHTML = "Open Camera";
+//    } else {
 
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: { width: 200, height: 200 }, frameRate: { ideal: 5, max: 10 }, audio: false }).then(function (stream) {
-                video.srcObject = stream;
-                video.play();
-            });
-        }
-        btnOpenCamera.setAttribute('data-state', 'opened');
-        btnOpenCamera.classList.add('btn-danger');
-        btnOpenCamera.classList.remove('btn-info');
-        btnOpenCamera.innerHTML = "Close Camera";
-    }
-};
+//        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+//            navigator.mediaDevices.getUserMedia({ video: { width: 200, height: 200 }, frameRate: { ideal: 5, max: 10 }, audio: false }).then(function (stream) {
+//                video.srcObject = stream;
+//                video.play();
+//            });
+//        }
+//        btnOpenCamera.setAttribute('data-state', 'opened');
+//        btnOpenCamera.classList.add('btn-danger');
+//        btnOpenCamera.classList.remove('btn-info');
+//        btnOpenCamera.innerHTML = "Close Camera";
+//    }
+//};
 
-btnClose.onclick = function () {
+//btnClose.onclick = function () {
     
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-        alert("WebSocket not connected.");
-    }
-    socket.close(1000, "Closing...");
-};
+//    if (!socket || socket.readyState !== WebSocket.OPEN) {
+//        alert("WebSocket not connected.");
+//    }
+//    socket.close(1000, "Closing...");
+//};
 
-btnConnect.onclick = function () {
-    lblState.innerHTML = "Connecting...";
-    socket = new WebSocket(server.value);
-    socket.onopen = function (event) {
-        updateState();
-        lblState.innerHTML = `Connected to ${server.value}`;
-        setInterval(() => {
-            if (isOpen(socket)) {
-                var data = getVideoFrame();
-                socket.send(data);
-            }
-        }, 1000 / 6);
-    };
-    socket.onclose = function (event) {
-        updateState();
-    };
-    socket.onerror = updateState;
-    socket.onmessage = message => {
-        document.getElementById('img').src = '';
-        var image = new Image();
-        image.src = `data:image/jpeg;base64,${message.data}`;
-        document.getElementById('img').src = image.src;
+//btnConnect.onclick = function () {
+//    lblState.innerHTML = "Connecting...";
+//    socket = new WebSocket(server.value);
+//    socket.onopen = function (event) {
+//        updateState();
+//        lblState.innerHTML = `Connected to ${server.value}`;
+//        setInterval(() => {
+//            if (isOpen(socket)) {
+//                var data = getVideoFrame();
+//                socket.send(data);
+//            }
+//        }, 1000 / 6);
+//    };
+//    socket.onclose = function (event) {
+//        updateState();
+//    };
+//    socket.onerror = updateState;
+//    socket.onmessage = message => {
+//        document.getElementById('img').src = '';
+//        var image = new Image();
+//        image.src = `data:image/jpeg;base64,${message.data}`;
+//        document.getElementById('img').src = image.src;
 
 
-    }
-};
+//    }
+//};
 
 const updateState = () => {
     function disable() {
@@ -190,4 +191,5 @@ const htmlEscape = (str) => {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;')
         .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        .replace(/>/g, '&gt;')
+};

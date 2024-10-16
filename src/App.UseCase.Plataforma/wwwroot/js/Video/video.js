@@ -1,3 +1,11 @@
+var localstream;
+var fileReader
+var dataChannel;
+var paused = true;
+const otherAudio = document.getElementById('gum');
+const partnerAudio = document.getElementById('remoteVideo');
+const fileTable = document.getElementById('fileTable');
+var peerConnectionConfig = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
 
 let mediaRecorder;
 let recordedBlobs;
@@ -7,6 +15,9 @@ const codecPreferences = document.querySelector('#codecPreferences');
 const errorMsgElement = document.querySelector('span#errorMsg');
 const recordedVideo = document.querySelector('video#recorded');
 const recordButton = document.querySelector('button#record');
+
+
+
 
 recordButton.addEventListener('click', () => {
   
@@ -135,6 +146,19 @@ async function startRecording()
 
 
 
+const userJoin = async () => {
+    debugger;
+    console.info('Joining...');
+    //wsconn.invoke("SetUser").catch((err) => {
+    //    console.error(err);
+    //})
+
+    await wsconn.invoke("SetUser").catch((err) => {
+        console.error(err);
+    });
+    //$("#IdUser").text(username);
+};
+
 const initializeUserMedia = async () => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         // Informe ao usuário que a funcionalidade não é suportada em seu navegador
@@ -143,10 +167,22 @@ const initializeUserMedia = async () => {
     }
 
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true,
-        });
+        const hasEchoCancellation = false;//document.querySelector('#echoCancellation').checked;
+
+        const constraints = {
+            audio: {
+                echoCancellation: { exact: hasEchoCancellation }
+            },
+            video: {
+                width: 1280, height: 720
+            }
+        };
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+        //const stream = await navigator.mediaDevices.getUserMedia({
+        //    audio: true,
+        //    video: true,
+        //});
         otherAudio.srcObject = stream;
         localstream = stream;
 
@@ -197,4 +233,7 @@ async function init(constraints) {
     errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
   }
 }
+
+
+
 

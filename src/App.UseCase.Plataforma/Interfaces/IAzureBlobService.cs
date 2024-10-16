@@ -2,7 +2,7 @@
 
 namespace app.plataforma.Interfaces;
 
-public interface IBlobService
+public interface IAzureBlobService
 {
     Task<BlobContentInfo> UploadFile(byte[] blob, string filename);
 

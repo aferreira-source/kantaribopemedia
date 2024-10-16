@@ -26,8 +26,11 @@
                 @*                 <button id="play" disabled>Play</button> *@
                 <button id="publicar" disabled class="btn btn-dark">Publicar</button>
             </div>
+            <div class="d-flex mx-auto">Seu Id:&nbsp;<p id="IdUser"></p></div>
+            <div class="d-flex mx-auto">Seu Id:&nbsp;<p id="lblUser"></p></div>
+            
             @*
-
+                
             <video id="gum" playsinline autoplay muted></video> *@
             <div style="display:none">
                 <video id="recorded" style="display:none" playsinline loop></video>
@@ -59,26 +62,24 @@
 
 @section Scripts
 {
-    <script src="~/js/variaveis.js"></script>
-    <script src="~/js/live/live-chat.js"></script>
-    <script src="~/js/live/live-funcoes.js"></script>
-    <script src="~/js/live/live.js"></script>
 
+
+    <script src="~/js/video/video.js"></script>
+    <script src="~/js/video/funcoes-rtc.js"></script>
+    <script src="~/js/FuncoesHub.js"></script>
+  
     <script>
-        'use strict';
+        'use strict';     
+        debugger;
 
-
-        var hubUrl = document.location.origin + '/live';
+        var hubUrl = document.location.origin + '/video';
         var wsconn = new signalR.HubConnectionBuilder()
             .withUrl(hubUrl, signalR.HttpTransportType.WebSockets)
             .configureLogging(signalR.LogLevel.Debug)
             .build();
 
-   
-
-
  
-        var IdConecçao = null
+        var IdConexao = null
 
         var peerConnection = null //instancia o webRTC
         var users = [], localStream, connections = {};
@@ -86,14 +87,21 @@
         var caller = null;
 
 
-        $(document).ready(function () {          
-            wsconn.start().then(() => {           
-                askUsername()
-                initializeUserMedia() // ligo a cam
+        $(document).ready(function () {                             
 
-                IdConecçao = wsconn.connection.connectionId
-                console.info(`Connected as ${user}`);
-                $("#lblUser").value(user.askUsername);
+            wsconn.start().then(() => {         
+                debugger;
+
+                //askUsername();
+                userJoin();
+                
+                initializeUserMedia(); // ligo a cam
+
+                IdConexao = wsconn.connection.connectionId
+                //console.info(`Connected as ${user}`);
+                
+               // console.info(`user.askUsername: ${user.askUsername}`);
+                //$("#lblUser").value(user.askUsername);
 
             }).catch(err => console.error(err));            
 

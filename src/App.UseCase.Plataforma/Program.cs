@@ -60,7 +60,7 @@ builder.Services.AddScoped<IPostagensService, PostagensService>();
 builder.Services.AddScoped<IFavoritosService, FavoritosService>();
 builder.Services.AddScoped<IUsuarioPostagem, UsuarioPostagem>();
 
-builder.Services.AddScoped<IBlobService, BlobService>();
+builder.Services.AddScoped<IAzureBlobService, AzureBlobService>();
 
 //3 elementos
 builder.Services.AddSingleton<List<User>>();
@@ -137,7 +137,7 @@ app.MapControllerRoute(
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<LiveHub>("/live", options =>
+    endpoints.MapHub<VideoHub>("/video", options =>
     {
         options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
     });

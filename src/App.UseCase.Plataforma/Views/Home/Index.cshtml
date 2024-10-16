@@ -48,21 +48,21 @@
 
                                     <ul class="list-unstyled">
                                         <li class="media border-bottom">
-                                            <img class="mr-3" src="..." alt="Generic placeholder image">
+                                            @* <img class="mr-3" src="..." alt="Generic placeholder image"> *@
                                             <div class="media-body">
                                                 <h5 class="mt-0 mb-1">List-based media object</h5>
                                                 Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
                                             </div>
                                         </li>
                                         <li class="media my-4 border-bottom">
-                                            <img class="mr-3" src="..." alt="Generic placeholder image">
+                                            @* <img class="mr-3" src="..." alt="Generic placeholder image"> *@
                                             <div class="media-body">
                                                 <h5 class="mt-0 mb-1">List-based media object</h5>
                                                 Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
                                             </div>
                                         </li>
                                         <li class="media border-bottom">
-                                            <img class="mr-3" src="..." alt="Generic placeholder image">
+                                            @* <img class="mr-3" src="..." alt="Generic placeholder image"> *@
                                             <div class="media-body">
                                                 <h5 class="mt-0 mb-1">List-based media object</h5>
                                                 Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
@@ -109,122 +109,3 @@
 </div>
 
 
-@section Scripts
-{
-
-    <script>
-
-        'use strict';
-
-        var video = document.getElementById('video');
-        var server = document.getElementById("server");
-        var btnConnect = document.getElementById("btnConnect");
-        var btnOpenCamera = document.getElementById("btnOpenCamera");
-        var btnClose = document.getElementById("btnClose");
-        var lblState = document.getElementById("lblState");
-        var img = document.getElementById('img');
-
-        var socket;
-        var scheme = document.location.protocol === "https:" ? "wss" : "ws";
-        var port = document.location.port ? (":" + document.location.port) : "";
-
-        var hubUrl = document.location.origin + '/cnnctn';
-        var hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl(hubUrl, signalR.HttpTransportType.WebSockets)
-            .configureLogging(signalR.LogLevel.None)
-            .build();
-
-        var subject = new signalR.Subject();
-        var acceptinguser = "";
-        var users = [];
-        var user = null;
-        var caller = null;
-
-        $(document).ready(function () {
-            server.value = scheme + "://" + document.location.hostname + port + "/ws";
-
-
-            hubConnection.start().then(() => {
-                user = generateId();
-                userJoin(user);
-                console.info(`Conectado é:  ${user}`);
-
-            }).catch(err => console.error(err));
-
-            hubConnection.on('AttUsuariosOnline', (userList) => {
-                console.info('Atualizando quem ta online...' + JSON.stringify(userList));
-                users = userList;
-
-                $('#usersdata li.user').remove();
-
-                $.each(userList, function (index) {
-                    var userIcon = '', status = '';
-                    if (userList[index].username === $("#IdUser").text()) {
-
-                    } else {
-                        var onlineUsers = '';
-                        onlineUsers += '<li class="list-group-item user" data-cid=' + userList[index].connectionId + ' data-username=' + userList[index].username + '>';
-                        onlineUsers += '<div class="d-lg-flex flex-row">';
-                        onlineUsers += '<div class="m-1 d-lg-flex justify-content-center align-items-center"><small>' + userList[index].username + '</small></div>';
-
-                        if (userList[index].username !== user) {
-                            onlineUsers += '<div class="d-flex flex-row justify-content-center align-items-center">';
-                            onlineUsers += '<div class="m-1 d-lg-flex justify-content-center align-items-center"><span data-callstatus=' + userList[index].inCall + '>' + ((userList[index].inCall == true) ? '<small>(Em Ligação)</small>' : '<small>(Idle)</small>') + '</span></div>';
-                            onlineUsers += '<div class="m-2"><button id="btnCallUser" type="button" class="btn btn-primary btn-sm" ' + ((userList[index].inCall == true) ? 'disabled' : '') + ' onclick="callUser(\'' + userList[index].connectionId + '\')">Ligar</button></div>';
-                            onlineUsers += '<div class="m-2"><button id="btnEndCall" type="button" class="btn btn-primary btn-sm" ' + ((userList[index].inCall == true) ? '' : 'disabled') + ' onclick="endCall(\'' + userList[index].connectionId + '\')">Desligar</button></div>';
-                            onlineUsers += '</div>';
-                        }
-                        onlineUsers += '</div></li>';
-                        $('#usersdata').append(onlineUsers);
-                    }
-                });
-
-
-
-
-                hubConnection.on('receiveData', (signalingUser, data) => {
-                    document.getElementById('imgHub').src = '';
-                    if (data.toString().startsWith('data:,') == false) {
-                        var image = new Image();
-                        image.src = `${data}`;
-                        document.getElementById('imgHub').src = image.src;
-                    }
-                });
-
-                hubConnection.on('ChamadaRecebida', (callingUser) => {
-                    console.info('Chamada Recebida de: ' + JSON.stringify(callingUser));
-                    caller = callingUser;
-                    //$('#callmodal').attr('data-callinguser', `${callingUser.username}`);
-                    //$('#callmodal .modal-body').text(`${callingUser.username} EStá ligando...`);
-                    //$('#callmodal').modal('show');
-                    acceptCall();
-                });
-            });
-
-
-            hubConnection.on('LigaCaoAceita', (acceptingUser) => {
-                console.info('Ligação aceita ' + JSON.stringify(acceptingUser) + '.');
-                acceptinguser = acceptingUser;
-            });
-
-            hubConnection.on('LidacaoNegada', (decliningUser, reason) => {
-                console.info('Call declined by ' + decliningUser.connectionId);
-            });
-
-            hubConnection.on('LigacaoDesligada', (signalingUser, signal) => {
-                console.info('Ligação com ' + signalingUser.connectionId + ' Terminou: ' + signal);
-                document.getElementById('imgHub').src = '';
-            });
-
-
-
-        });
-
-
-
-
-
-    </script>
-    <script src="~/js/funcoeshub.js"></script>
-
-} 
