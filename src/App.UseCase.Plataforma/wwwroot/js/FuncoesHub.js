@@ -24,15 +24,6 @@ const declineCall = () => {
     $('#callmodal').modal('hide');
 };
 
-const userJoin =() => {
-    console.info('Joining...');
-    hubConnection.invoke("Join", username).catch((err) => {
-        console.error(err);
-    });
-
-    //$("#IdUser").text(username);
-    dataStream('');
-};
 
 const dataStream = (acceptingUser) => {
     if (hubConnection.state === 'Connected') {
@@ -40,7 +31,8 @@ const dataStream = (acceptingUser) => {
     }
 };
 
-const intervalHandle = setInterval(() => {
+//ver depois
+//const intervalHandle = setInterval(() => {
     //let state = btnOpenCamera.getAttribute('data-state');
     //if (state === 'opened') {
     //    subject.next(`${(acceptinguser) ? acceptinguser.connectionId : ''}|${getVideoFrame()}`);
@@ -59,7 +51,7 @@ const intervalHandle = setInterval(() => {
     //} else {
     //    //subject.complete();
     //}
-}, 500);
+//}, 500);
 
 
 
@@ -193,3 +185,4 @@ const htmlEscape = (str) => {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
 };
+

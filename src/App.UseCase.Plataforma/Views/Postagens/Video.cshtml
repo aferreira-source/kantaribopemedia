@@ -108,6 +108,7 @@
             
             wsconn.on('AttUsuariosOnline', (userList) => {
                
+                debugger;
                 console.info('Check online users...' + JSON.stringify(userList));
                 users = userList;
 
@@ -121,7 +122,8 @@
                             //alert('meu ' + userList[index].username + ' ' + wsconn.connection.connectionId);
 
                     // if (userList[index].username === $("#lblUser").text()) {
-                            if (userList[index].connectionId === wsconn.connection.connectionId) {
+                    if (userList[index].connectionId === wsconn.connection.connectionId) {
+                        //Fazer algo
 
                     } else {
 
@@ -142,12 +144,7 @@
 
                     }
                 });
-
-
-                var usuario = users.find(u => u.username == user)
-                if (usuario.inCall == false) {
-                    limparChat();
-                }
+               
             });
 
 

@@ -1,8 +1,4 @@
 
-
-
-
-
 const getConnection = (partnerClientId) => {
     console.log("WebRTC: called getConnection");
     if (connections[partnerClientId]) {
@@ -168,8 +164,7 @@ sendHubSignal = (candidate, partnerClientId) =>
     wsconn.invoke('sendSignal', candidate, partnerClientId).catch(errorHandler);
 };
 
-const receivedCandidateSignal = (connection, partnerClientId, candidate) =>
-{
+const receivedCandidateSignal = (connection, partnerClientId, candidate) => {
 
     console.log('WebRTC: adding full candidate');
     connection.addIceCandidate(new RTCIceCandidate(candidate), () => console.log("WebRTC: added candidate successfully"), () => console.log("WebRTC: cannot add candidate"));
@@ -242,15 +237,15 @@ const receivedCandidateSignal = (connection, partnerClientId, candidate) =>
         });
     }
 
-    const errorHandler = (error) => {
-        if (error.message)
-            alertify.alert('<h4>Error Occurred</h4></br>Error Info: ' + JSON.stringify(error.message));
-        else
-            alertify.alert('<h4>Error Occurred</h4></br>Error Info: ' + JSON.stringify(error));
-
-        consoleLogger(error);
-    };
-
 }
 
 
+
+const errorHandler = (error) => {
+    if (error.message)
+        alertify.alert('<h4>Error Occurred</h4></br>Error Info: ' + JSON.stringify(error.message));
+    else
+        alertify.alert('<h4>Error Occurred</h4></br>Error Info: ' + JSON.stringify(error));
+
+    consoleLogger(error);
+};
