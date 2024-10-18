@@ -70,16 +70,24 @@ video {*/
 }*/
 
 
-video {
-    object-fit: none;
+/*video {
+    object-fit: contain;
+    background-color: black;
     position: center;
     top: 0;
     left: 0;
     height: 400px;
     width: 100%;
+}*/
+
+video {
+    height: auto;
+    margin-top: 10px;
+    width: 100%;
+    z-index: -1;
 }
 
-#video-wrapper {
+/*#video-wrapper {
     border: 2px solid groove;
     border-inline-color:black;
     width: 300px;
@@ -91,11 +99,12 @@ video {
     align-items: center;
     justify-content: center;
     padding:10px;
-}
+}*/
 
 
 .card-video {
-    padding:5px;
+    padding: 5px;
+    background-color: black;
 }
 
 #div-linha-card {
@@ -115,4 +124,8 @@ video {
 
 .container {
     padding: 2px;
+}
+
+.conteudo {
+    
 }

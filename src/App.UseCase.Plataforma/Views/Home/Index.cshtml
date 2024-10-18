@@ -13,13 +13,14 @@
 
                 <div class="container">
                                    
-                    <div class="row row-cols-@ViewData["column"]">
+                   @*  <div class="row row-cols-@ViewData["column"]"> *@
+                    <div class="row row-cols-3">
 
                         @foreach (var postagens in Model!.ToList())
                         {
-                            <div class="card">
+                            <div class="card card-video">
                                 <h5 class="card-header bg-dark text-white">@postagens.titulo</h5>
-                                <div id="#card-body-video">
+                                <div id="#card-body-video" >
 
                                     <div class="container">
 
@@ -29,10 +30,10 @@
                                                 Your browser does not support the video tag.
                                             </video>
 
-                                            <h6 class="mt-0 mb-1"><b>Publicação:&nbsp;</b>@postagens.dtHora_Publicacao</h6>
-                                            <h6 class="mt-0 mb-2"><b>Autor:&nbsp;</b>@postagens.usuario</h6>
+                                            <h6 class="mt-0 mb-1 text-white"><b>Publicação:&nbsp;</b>@postagens.dtHora_Publicacao</h6>
+                                            <h6 class="mt-0 mb-2 text-white"><b>Autor:&nbsp;</b>@postagens.usuario</h6>
 
-                                            <div class="conteudo">
+                                            <div class="conteudo text-white">
                                                 @postagens.descricao
                                             </div>
 
