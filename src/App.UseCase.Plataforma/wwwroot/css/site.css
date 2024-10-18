@@ -80,7 +80,8 @@ video {
 }
 
 #video-wrapper {
-    border: 2px solid #000;
+    border: 2px solid groove;
+    border-inline-color:black;
     width: 300px;
     height: 200px;
     position: center;
@@ -89,15 +90,12 @@ video {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding:10px;
 }
 
 
-
-.conteudo {
-    left: 0;
-    z-index: 100;
-    background-color: white;
-    min-height: 100%;
+.card-video {
+    padding:5px;
 }
 
 #div-linha-card {
