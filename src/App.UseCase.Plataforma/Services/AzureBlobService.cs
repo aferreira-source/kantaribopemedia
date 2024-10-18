@@ -19,9 +19,12 @@ public class AzureBlobService : IAzureBlobService
     public const string ErrorMessageKey = "ErrorMessage";
     private readonly BlobServiceClient _blobServiceClient;
     private readonly BlobContainerClient _containerClient;
+    private readonly IWebHostEnvironment _environment;
 
-    public AzureBlobService(MongoDBContext context, UserManager<ApplicationUser> userManager,
-        AzureStorage azureStorage)
+    public AzureBlobService(MongoDBContext context,
+        UserManager<ApplicationUser> userManager,
+        AzureStorage azureStorage,
+        IWebHostEnvironment environment)
     {
         _azureStorage = azureStorage;
 
@@ -39,10 +42,22 @@ public class AzureBlobService : IAzureBlobService
 
         _context = context;
         _userManager = userManager;
+        _environment = environment;
     }
 
     public async Task<BlobContentInfo> UploadFile(byte[] blob, string filename)
     {
+        string pathUpload = Path.Combine(_environment.WebRootPath, "upload", filename);
+        File.WriteAllBytes(pathUpload, blob);
+
+        using (Stream str = new MemoryStream(blob))
+        {
+            string blobName = filename;
+            var blobClient = _containerClient.GetBlobClient(blobName);
+            var uploadOptions = new BlobUploadOptions() { HttpHeaders = new BlobHttpHeaders() { ContentType = "video/mp4" } };
+            return await blobClient.UploadAsync(str, uploadOptions);
+        }
+
 
         using (Stream str = new MemoryStream(blob))
         {
@@ -52,6 +67,20 @@ public class AzureBlobService : IAzureBlobService
             return await blobClient.UploadAsync(str, uploadOptions);
         }
     }
+
+    //public async Task<bool> DownloadFile(string filename)
+    //{
+    //    var path = 
+    //    if ()
+    //    using (Stream str = new MemoryStream(blob))
+    //    {
+    //        string blobName = filename;
+    //        var blobClient = _containerClient.GetBlobClient(blobName);
+    //        var uploadOptions = new BlobUploadOptions() { HttpHeaders = new BlobHttpHeaders() { ContentType = "video/mp4" } };
+    //        return await blobClient.UploadAsync(str, uploadOptions);
+    //    }
+    //}
+
 
 
     public async Task<BlobContentInfo> GetPathFile(string filename)

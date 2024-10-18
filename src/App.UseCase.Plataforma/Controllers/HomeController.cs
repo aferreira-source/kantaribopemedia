@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Diagnostics;
+using Wangkanai.Detection.Models;
+using Wangkanai.Detection.Services;
 
 namespace app.plataforma.Controllers;
 
@@ -20,18 +22,21 @@ public class HomeController : Controller
     private RoleManager<ApplicationRole> roleManager;
     private IHttpContextAccessor _httpContextAccessor;
     private readonly IPostagensService _postagensService;
+    private readonly IDetectionService _detectionService;
     public HomeController(IHttpContextAccessor httpContextAccessor,
         IPostagensService postagensService,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
         ILogger<HomeController> logger,
-        IHubContext<VideoHub, IConnectionHub> hubContext)
+        IHubContext<VideoHub, IConnectionHub> hubContext,
+        IDetectionService detectionService)
     {
         _logger = logger;
         _httpContextAccessor = httpContextAccessor;
         this.userManager = userManager;
         this.roleManager = roleManager;
         _postagensService = postagensService;
+        _detectionService = detectionService;
     }
 
     public async Task<IActionResult> ObterUsuario()
@@ -52,6 +57,8 @@ public class HomeController : Controller
     //[ResponseCache(NoStore = true, Duration = 3)]
     public async Task<IActionResult> Index()
     {
+        ViewData["column"] = _detectionService.Device.Type == Device.Mobile ? 1 : 2;
+
         var model = await _postagensService.ObterPostagens();
         //await Task.Run(async () => _postagensService.ObterPostagens().Result);
         return View(model);

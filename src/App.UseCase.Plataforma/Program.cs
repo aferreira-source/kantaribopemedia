@@ -7,6 +7,7 @@ using app.plataforma.Services;
 using AspNetCore.Identity.Mongo;
 using Azure;
 using Azure.Storage.Blobs;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -69,6 +70,9 @@ builder.Services.AddSingleton<List<Call>>();
 
 builder.Services.AddSingleton<List<Call>>();
 
+builder.Services.AddDetection();
+
+
 AzureSasCredential credential = new AzureSasCredential(azureStorage.Signature);
 Uri uri = new Uri(azureStorage.Url);
 builder.Services.AddSingleton(x => new BlobServiceClient(uri, credential));
@@ -109,6 +113,13 @@ builder.Services
         mongo.ConnectionString = mongoDBSettings.ConnectionString;
         // other options
     });
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration["Kestrel:Certificates:Development:Password:blob"]!, preferMsi: true);
+    clientBuilder.AddQueueServiceClient(builder.Configuration["Kestrel:Certificates:Development:Password:queue"]!, preferMsi: true);
+});
+
+
 
 
 var app = builder.Build();
@@ -124,6 +135,8 @@ app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseDetection();
 
 app.UseRouting();
 

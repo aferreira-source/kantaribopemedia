@@ -4,6 +4,8 @@ using app.plataforma.Interfaces;
 using AspNetCore.Identity.Mongo.Mongo;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;
+using Wangkanai.Detection.Models;
+using Wangkanai.Detection.Services;
 
 namespace app.plataforma.Services;
 
@@ -16,11 +18,14 @@ public class PostagensService : IPostagensService
     private readonly IWebHostEnvironment _environment;
     private readonly IAzureBlobService _bloService;
     private readonly AzureStorage _azureStorage;
+
+    private readonly IDetectionService _detectionService;
     public PostagensService(MongoDBContext context,
         UserManager<ApplicationUser> userManager,
         AzureStorage azureStorage,
         IWebHostEnvironment environment,
-        IAzureBlobService bloService)
+        IAzureBlobService bloService,
+        IDetectionService detectionService)
     {
         _context = context;
         _userManager = userManager;
@@ -28,6 +33,7 @@ public class PostagensService : IPostagensService
         //fsBucket = new GridFSBucket(_context.Postagens.Database, new GridFSBucketOptions { BucketName = bucket });
         _azureStorage = azureStorage;
         _bloService = bloService;
+        _detectionService = detectionService;
     }
 
 
@@ -78,9 +84,14 @@ public class PostagensService : IPostagensService
         var lstPostagens = await _context.Postagens.Aggregate()
                     .Match(filter)
                     .SortByDescending(u => u.dtHora_Publicacao).ToListAsync();
-        var x = lstPostagens.Select(x => { x.linkFile = $"{_azureStorage.Url}/{_azureStorage.BlobName}/{x.nomeArquivo}"; return x; });
 
-        return lstPostagens.Select(x => { x.linkFile = $"{_azureStorage.Url}/{_azureStorage.BlobName}/{x.nomeArquivo}"; return x; });
+
+
+
+
+
+        return lstPostagens.Select(x => { x.linkFile = string.Concat("/upload/", x.nomeArquivo); x.isMobile = _detectionService.Device.Type == Device.Mobile; return x; });
+        //return lstPostagens.Select(x => { x.linkFile = $"{_azureStorage.Url}/{_azureStorage.BlobName}/{x.nomeArquivo}"; return x; });
     }
 
 

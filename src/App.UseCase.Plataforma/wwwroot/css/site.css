@@ -31,14 +31,65 @@ body {
 }
 
 
-#video-publicado {
-    min-width: 100%;
-    min-height: 40vh;
-    height: 20vh;
-    width: 75%;
-    object-fit: fill;
-    padding-bottom: 10px;
+/*#video-publicado {
+    min-width: auto;
+    min-height: auto;
+    max-width: 50vh;
+    max-height: 50vh;
+    padding-bottom: 4px;
     z-index: -100;
+    background: url('../images/kantaribope.png');
+    background-size: cover;
+}*/
+
+/*.video-wrapper {*/
+    /* Telling our absolute positioned video to 
+  be relative to this element */
+    /*position: relative;
+    width: 400px;
+    height: 200px;*/
+    /* Will not allow the video to overflow the 
+  container */
+    /*overflow: hidden;*/
+    /* Centering the container's content vertically 
+  and horizontally */
+    /*text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+video {*/
+    /** Simulationg background-size: cover */
+    /*object-fit: cover;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}*/
+
+
+video {
+    object-fit: cover;
+    position: center;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+   
+}
+
+#video-wrapper {
+    border: 2px solid #000;
+    width: 300px;
+    height: 400px;
+    position: center;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 

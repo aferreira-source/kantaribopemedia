@@ -3,6 +3,10 @@
     "signalr1": {
       "type": "signalr",
       "connectionId": "Azure:SignalR:ConnectionString"
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "Kestrel:Certificates:Development:Password"
     }
   }
 }

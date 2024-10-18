@@ -31,6 +31,9 @@ public class Postagens
     public Object? fileBlob { get; set; }
 
 
+    [BsonIgnore]
+    public bool? isMobile { get; set; }
+
     //[BsonElement("arquivoId")]
     //public ObjectId? arquivoId { get; set; }
 

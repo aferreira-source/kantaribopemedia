@@ -11,6 +11,19 @@
 
 <div class="container">
 
+
+    <div class="row " id="DivWithID">
+        <div class="col-12 card card-body text-center">
+            <div class="d-flex justify-content-center align-items-center mx-auto card card-body w-50">
+                <strong>Seu Link da Sala:</strong>&nbsp;<a class="p-2 form-control" id="IdUser"></a>
+                <button id="CopyTextBTN" class=" btn btn-outline-success mt-2" data-clipboard-target="#IdUser">Copiar texto</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <div class="row">
         <div class="col-sm-8">
 
@@ -57,20 +70,23 @@
             </div>               
 
         </div>
+   </div>
 
 
 
 @section Scripts
 {
 
-
-    <script src="~/js/video/video.js"></script>
-    <script src="~/js/video/funcoes-rtc.js"></script>
     <script src="~/js/FuncoesHub.js"></script>
+
+    <script src="~/js/video/funcoes-rtc.js"></script>
+ 
+    <script src="~/js/video/video.js"></script>
   
     <script>
         'use strict';     
-        debugger;
+ 
+        const conectParceiro = '@Html.Raw(ViewBag.ConectId)';
 
         var hubUrl = document.location.origin + '/video';
         var wsconn = new signalR.HubConnectionBuilder()
@@ -81,6 +97,8 @@
  
         var IdConexao = null
 
+        var peerConnectionConfig = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
+
         var peerConnection = null //instancia o webRTC
         var users = [], localStream, connections = {};
         var user = null;
@@ -89,8 +107,18 @@
 
         $(document).ready(function () {                             
 
-            wsconn.start().then(() => {         
-                debugger;
+
+            var clipboard = new ClipboardJS(CopyTextBTN);
+
+            clipboard.on('success', function (e) {
+                console.info('Action:', e.action);
+                console.info('Text:', e.text);
+                console.info('Trigger:', e.trigger);
+            });
+           
+
+            wsconn.start().then(() => {        
+           
 
                 //askUsername();
                 userJoin();
@@ -98,6 +126,10 @@
                 initializeUserMedia(); // ligo a cam
 
                 IdConexao = wsconn.connection.connectionId
+                $("#IdUser").text(document.location.origin + "@Url.Action("Video", "Postagens")?ConectId=" +IdConexao);
+
+               
+                Chamada();
                 //console.info(`Connected as ${user}`);
                 
                // console.info(`user.askUsername: ${user.askUsername}`);
@@ -108,7 +140,7 @@
             
             wsconn.on('AttUsuariosOnline', (userList) => {
                
-                debugger;
+             
                 console.info('Check online users...' + JSON.stringify(userList));
                 users = userList;
 
@@ -146,6 +178,24 @@
                 });
                
             });
+
+
+            function Chamada() {
+                if (conectParceiro) {
+
+                    $('#DivWithID').hide()
+                    
+                    //BlockUi()
+                    const EntrarNaSala = setTimeout(function () {
+                        // enviar dados via SignalR
+                        ///alert('entrei'); metodos associados
+                        let conectar = { "connectionId": conectParceiro };
+                        callUser(conectParceiro)
+                    }, 1000)
+
+                }
+            }
+
 
 
             wsconn.on('receivedatamsg', (signalingUser, data) => {
@@ -198,64 +248,7 @@
                 playAudio("MyAudio", 'stop')
                 playAudio("AudioReceive", 'stop')
                 closeConnection(caller.connectionId);
-            });
-
-
-            $('#BtnLigar').on('click', () => {
-                let id = $('#inputIdLigar').val()
-
-                if (!id) {
-                    SweetAlerta.fire({
-                        title: 'Coloque o ID',
-                        text: "Não colocou o id de quem vai ligar",
-                        icon: 'warning',
-                        showCancelButton: false,
-                        confirmButtonText: 'Entendi',
-                        cancelButtonText: 'No, cancel!',
-                        reverseButtons: true
-                    })
-
-                }
-                else {
-                    callUser(id)
-                }
-
-
-            }) // metodo de ligar pelo butom
-
-            wsconn.on("ReceberMensagem", function (mensagem) {
-                alert(`Mensagem recebida: ${mensagem}`)
-            })
-
-            $("#formchjat").on("submit", (event) => {
-
-                var valueMsg = $("#ChatConversa").val();
-                var horaAtual = new Date().toLocaleTimeString();
-                var mensagem = `   <div class="chat-message-right pb-4 chatHub">
-                                                                                                <div>
-                                                                                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-                                                                                                    <div class="text-muted small text-nowrap mt-2">${horaAtual}</div>
-                                                                                                </div>
-                                                                                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                                                                                                    <div class="font-weight-bold mb-1">You</div>
-                                                                                                            ${valueMsg}
-                                                                                                </div>
-                                                                                            </div>
-
-                                                                                                            `
-
-                $("#Chatmesseger").append(mensagem);
-                scrollToBottom('Chatmesseger')
-
-                $('#formchjat').each(function () {
-                    this.reset();
-                });
-
-                wsconn.invoke("senddatamsg", valueMsg, caller.connectionId).catch(function (err) {
-                    return console.error(err.toString());
-                });
-                event.preventDefault();
-            });
+            });    
 
 
        

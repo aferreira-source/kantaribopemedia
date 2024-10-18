@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
+using Wangkanai.Detection.Services;
 
 namespace app.plataforma.Controllers;
 
@@ -20,12 +21,14 @@ public class PostagensController : Controller
     private RoleManager<ApplicationRole> roleManager;
     private IHttpContextAccessor _httpContextAccessor;
 
+    private readonly IDetectionService _detectionService;
     public PostagensController(ILogger<PostagensController> logger,
         IPostagensService postagensService,
         IUsuarioPostagem usuarioPostagem,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IDetectionService detectionService)
     {
         this.userManager = userManager;
         this.roleManager = roleManager;
@@ -33,12 +36,14 @@ public class PostagensController : Controller
         _postagensService = postagensService;
         _usuarioPostagem = usuarioPostagem;
         _httpContextAccessor = httpContextAccessor;
+        _detectionService = detectionService;
     }
 
 
 
     public async Task<IActionResult> MinhasPostagens()
     {
+
         var usuarioid = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
         var model = await _postagensService.ObterTodosPorIdUsuarioAsync(usuarioid);
         return View(model);

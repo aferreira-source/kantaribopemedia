@@ -101,7 +101,8 @@ async function startRecording()
             echoCancellation: { exact: hasEchoCancellation }
         },
         video: {
-            width: 1280, height: 720
+            width: { min: 1024, ideal: 1280, max: 1920 },
+            height: { min: 576, ideal: 720, max: 1080 },
         }
     };
     await init(constraints); 
@@ -129,7 +130,7 @@ async function startRecording()
         errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
         return;
       }
-
+ 
       console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
       recordButton.textContent = 'Parar';
       //playButton.disabled = true;
@@ -147,11 +148,7 @@ async function startRecording()
 
 
 const userJoin = async () => {
-    debugger;
     console.info('Joining...');
-    //wsconn.invoke("SetUser").catch((err) => {
-    //    console.error(err);
-    //})
 
     await wsconn.invoke("SetUser").catch((err) => {
         console.error(err);
@@ -174,8 +171,11 @@ const initializeUserMedia = async () => {
                 echoCancellation: { exact: hasEchoCancellation }
             },
             video: {
-                width: 1280, height: 720
+                width: { min: 1024, ideal: 1280, max: 1920 },
+                height: { min: 576, ideal: 720, max: 1080 },
             }
+
+
         };
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
 

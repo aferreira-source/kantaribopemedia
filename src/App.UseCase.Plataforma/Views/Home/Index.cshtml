@@ -1,31 +1,33 @@
 ﻿@model IEnumerable<app.plataforma.Postagens>
 @{
     ViewData["Title"] = "Portal de notícias";
+    
 }
+
 <div class="container">
     <div class="row">
+
         <div class="card">
-            <h5 class="card-header bg-dark text-white">Notícias</h5>
+            <h5 class="card-header bg-dark text-white">Portal de noticias</h5>
             <div class="card-body">
 
                 <div class="container">
-                    <div class="row">
-                        <div class="col-7">
-                            <div class="media">
-                                <div class="media-body">
+                                   
+                    <div class="row row-cols-@ViewData["column"]">
 
-                                    @foreach (var postagens in Model!.ToList())
-                                    {
-                                        <div class="media border-bottom">
-                                            <h2 class="mt-0 mb-1">@postagens.titulo</h2>
+                        @foreach (var postagens in Model!.ToList())
+                        {
+                            <div class="card">
+                                <h5 class="card-header bg-dark text-white">@postagens.titulo</h5>
+                                <div class="card-body">
 
-                                            <video id="video-publicado" controls="true">
-                                                @* <source src="~/upload/@postagens.nomeArquivo" type="video/mp4" loop> *@
-                                                <source src=@postagens.linkFile  type="video/mp4" loop>
+                                    <div class="container">
 
+                                        <div class="col">
+                                            <video autoplay muted loop controls>
+                                                <source src=@postagens.linkFile type="video/mp4">
+                                                Your browser does not support the video tag.
                                             </video>
-
-                                            <h6 class="mt-0 mb-1"><b>linkFile</b>@postagens.linkFile</h6>
 
                                             <h6 class="mt-0 mb-1"><b>Publicação:&nbsp;</b>@postagens.dtHora_Publicacao</h6>
                                             <h6 class="mt-0 mb-2"><b>Autor:&nbsp;</b>@postagens.usuario</h6>
@@ -35,77 +37,60 @@
                                             </div>
 
                                         </div>
-                                    }
 
-
-
-                                    <video id="video-publicado" controls="true">
-                                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" loop>
-                                    </video>
-                                    <div class="conteudo">
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
                                     </div>
-
-                                    <ul class="list-unstyled">
-                                        <li class="media border-bottom">
-                                            @* <img class="mr-3" src="..." alt="Generic placeholder image"> *@
-                                            <div class="media-body">
-                                                <h5 class="mt-0 mb-1">List-based media object</h5>
-                                                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                            </div>
-                                        </li>
-                                        <li class="media my-4 border-bottom">
-                                            @* <img class="mr-3" src="..." alt="Generic placeholder image"> *@
-                                            <div class="media-body">
-                                                <h5 class="mt-0 mb-1">List-based media object</h5>
-                                                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                            </div>
-                                        </li>
-                                        <li class="media border-bottom">
-                                            @* <img class="mr-3" src="..." alt="Generic placeholder image"> *@
-                                            <div class="media-body">
-                                                <h5 class="mt-0 mb-1">List-based media object</h5>
-                                                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                            </div>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
+                        }
 
-
-                        </div>
-                        <div class="col">
-                            <div class="container" id="div-lives">
-                                <div class="row" id="div-linha-card">
-                                    <div class="card">
-                                        <h5 class="card-header bg-dark text-white">Live</h5>
-                                        <div class="card-body">
-                                            <h5 class="card-title">Assuntos relacionados a profissões de TI</h5>
-                                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                            <a href="#" class="btn btn-primary">Entrar</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="card">
-                                        <h5 class="card-header bg-dark text-white">Live</h5>
-                                        <div class="card-body">
-                                            <h5 class="card-title">Assuntos sobre política 2024</h5>
-                                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                            <a href="#" class="btn btn-primary">Entrar</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+
+
+@* @foreach (var postagens in Model!.ToList())
+{
+
+    <div class="container">
+        <div class="row">
+            <div class="cols">
+
+                <h2 class="mt-0 mb-1">@postagens.titulo</h2>
+
+
+                <div class="video-wrapper">
+                    <video controls playsinline autoplay muted loop>
+                        <source src=@postagens.linkFile type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+
+
+                <h6 class="mt-0 mb-1"><b>linkFile</b>@postagens.linkFile</h6>
+
+                <h6 class="mt-0 mb-1"><b>Publicação:&nbsp;</b>@postagens.dtHora_Publicacao</h6>
+                <h6 class="mt-0 mb-2"><b>Autor:&nbsp;</b>@postagens.usuario</h6>
+
+                <div class="conteudo">
+                    @postagens.descricao
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+} *@
+
+
+
+
 
 
