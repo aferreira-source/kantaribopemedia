@@ -4,7 +4,6 @@ using app.plataforma.Interfaces;
 using AspNetCore.Identity.Mongo.Mongo;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;
-using Wangkanai.Detection.Models;
 using Wangkanai.Detection.Services;
 
 namespace app.plataforma.Services;
@@ -87,10 +86,9 @@ public class PostagensService : IPostagensService
 
 
 
+        return lstPostagens.Select(x => { x.linkFile = string.Concat("/upload/", x.nomeArquivo); return x; });
 
-
-
-        return lstPostagens.Select(x => { x.linkFile = string.Concat("/upload/", x.nomeArquivo); x.isMobile = _detectionService.Device.Type == Device.Mobile; return x; });
+        //return lstPostagens.Select(x => { x.linkFile = "http://localhost:10000/devstoreaccount1/portal-blob/b012391f-30f3-4bd6-83ea-a5a2b1b2c562.mp4"; return x; });
         //return lstPostagens.Select(x => { x.linkFile = $"{_azureStorage.Url}/{_azureStorage.BlobName}/{x.nomeArquivo}"; return x; });
     }
 
