@@ -1,5 +1,4 @@
-﻿
-const sendSignal = (candidate, partnerClientId) => {
+﻿const sendSignal = (candidate, partnerClientId) => {
     hubConnection.invoke('sendData', candidate, partnerClientId).catch(err => console.error(err));
 };
 
@@ -24,15 +23,29 @@ const declineCall = () => {
     $('#callmodal').modal('hide');
 };
 
+const userJoin = (username) => {
+   
+
+
+    console.info('Joining...');
+    hubConnection.invoke("Join", username).catch((err) => {
+        console.error(err);
+    });
+
+    $("#IdUser").text(username);
+    dataStream('');
+  //lembrar depois de verificar essa rotina datastream, dando problema
+};
 
 const dataStream = (acceptingUser) => {
+
+    if (acceptingUser == '') return;
     if (hubConnection.state === 'Connected') {
         hubConnection.send("UploadStream", subject, `${(acceptingUser) ? acceptingUser.connectionId : ''}`);
     }
 };
 
-//ver depois
-//const intervalHandle = setInterval(() => {
+const intervalHandle = setInterval(() => {
     //let state = btnOpenCamera.getAttribute('data-state');
     //if (state === 'opened') {
     //    subject.next(`${(acceptinguser) ? acceptinguser.connectionId : ''}|${getVideoFrame()}`);
@@ -51,12 +64,11 @@ const dataStream = (acceptingUser) => {
     //} else {
     //    //subject.complete();
     //}
-//}, 500);
+}, 500);
 
 
 
 //btnOpenCamera.onclick = function () {
-    
 //    var state = btnOpenCamera.getAttribute('data-state')
 //    if (state === 'opened') {
 //        var stream = video.srcObject;
@@ -88,7 +100,6 @@ const dataStream = (acceptingUser) => {
 //};
 
 //btnClose.onclick = function () {
-    
 //    if (!socket || socket.readyState !== WebSocket.OPEN) {
 //        alert("WebSocket not connected.");
 //    }
@@ -183,6 +194,5 @@ const htmlEscape = (str) => {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;')
         .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-};
-
+        .replace(/>/g, '&gt;');
+}

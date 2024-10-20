@@ -3,65 +3,64 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace app.plataforma.Controllers
+namespace app.plataforma.Controllers;
+
+public class OperationsController : Controller
 {
-    public class OperationsController : Controller
+    private UserManager<ApplicationUser> userManager;
+
+    private RoleManager<ApplicationRole> roleManager;
+
+    public OperationsController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
     {
-        private UserManager<ApplicationUser> userManager;
+        this.userManager = userManager;
+        this.roleManager = roleManager;
+    }
 
-        private RoleManager<ApplicationRole> roleManager;
+    public ViewResult Create() => View();
 
-        public OperationsController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+    [HttpPost]
+    public async Task<IActionResult> Create(UserIdentity user)
+    {
+        if (ModelState.IsValid)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
-        }
-
-        public ViewResult Create() => View();
-
-        [HttpPost]
-        public async Task<IActionResult> Create(UserIdentity user)
-        {
-            if (ModelState.IsValid)
+            ApplicationUser appUser = new ApplicationUser
             {
-                ApplicationUser appUser = new ApplicationUser
-                {
-                    UserName = user.Name,
-                    Email = user.Email
-                };
+                UserName = user.Name,
+                Email = user.Email
+            };
 
-                IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
+            IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
 
-                //await userManager.AddToRoleAsync(appUser, "Admin");
+            //await userManager.AddToRoleAsync(appUser, "Admin");
 
-                if (result.Succeeded)
-                    ViewBag.Message = "Cadastro realizado com sucesso!";
-                else
-                {
-                    foreach (IdentityError error in result.Errors)
-                        ModelState.AddModelError("", error.Description);
-                }
-            }
-            return View(user);
-        }
-
-        public IActionResult CreateRole() => View();
-
-        [HttpPost]
-        public async Task<IActionResult> CreateRole([Required] string name)
-        {
-            if (ModelState.IsValid)
+            if (result.Succeeded)
+                ViewBag.Message = "Cadastro realizado com sucesso!";
+            else
             {
-                IdentityResult result = await roleManager.CreateAsync(new ApplicationRole() { Name = name });
-                if (result.Succeeded)
-                    ViewBag.Message = "Role Created Successfully";
-                else
-                {
-                    foreach (IdentityError error in result.Errors)
-                        ModelState.AddModelError("", error.Description);
-                }
+                foreach (IdentityError error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
             }
-            return View();
         }
+        return View(user);
+    }
+
+    public IActionResult CreateRole() => View();
+
+    [HttpPost]
+    public async Task<IActionResult> CreateRole([Required] string name)
+    {
+        if (ModelState.IsValid)
+        {
+            IdentityResult result = await roleManager.CreateAsync(new ApplicationRole() { Name = name });
+            if (result.Succeeded)
+                ViewBag.Message = "Role Created Successfully";
+            else
+            {
+                foreach (IdentityError error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
+            }
+        }
+        return View();
     }
 }

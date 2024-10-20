@@ -15,7 +15,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\upload\37299447-6c17-428d-ac8c-043573232c23.mp4" />
+    <Compile Remove="wwwroot\js\Video\**" />
+    <Content Remove="wwwroot\js\Video\**" />
+    <EmbeddedResource Remove="wwwroot\js\Video\**" />
+    <None Remove="wwwroot\js\Video\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Postagens\Videox.cshtml" />
+    <Content Remove="wwwroot\js\FuncoesHub.js" />
   </ItemGroup>
 
   <ItemGroup>

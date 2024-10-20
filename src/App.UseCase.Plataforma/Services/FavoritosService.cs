@@ -23,7 +23,7 @@ public class FavoritosService : IFavoritosService
         var filter = Builders<Favoritos>.Filter.Where(x => x.usuarioId == IdUsuario);
         await _context.Favoritos.DeleteManyAsync(filter);
     }
-  
+
     public async Task InserirAsync(Favoritos obj)
     {
         await _context.Favoritos.InsertOneAsync(obj);
@@ -31,6 +31,6 @@ public class FavoritosService : IFavoritosService
 
     public async Task<List<Favoritos>> ObterListaPorIdUsuarioAsync(object IdUsuario)
     {
-       return await _context.Favoritos.Find(p => p.Id == IdUsuario).ToListAsync();
+        return await _context.Favoritos.Find(p => p.Id == IdUsuario).ToListAsync();
     }
 }

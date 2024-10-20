@@ -1,17 +1,16 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace app.plataforma
-{
-    public class EntityBase
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+namespace app.plataforma;
 
-        public EntityBase()
-        {
-         Id = Guid.NewGuid().ToString();
-        }
+public class EntityBase
+{
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? Id { get; set; }
+
+    public EntityBase()
+    {
+        Id = Guid.NewGuid().ToString();
     }
 }

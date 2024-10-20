@@ -80,11 +80,10 @@ video {*/
     width: 100%;
 }*/
 
-video {
+#video-postagens {
     height: auto;
     margin-top: 10px;
     width: 100%;
-    z-index: -1;
 }
 
 /*#video-wrapper {

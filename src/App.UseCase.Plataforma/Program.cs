@@ -1,6 +1,6 @@
 using app.plataforma;
 using app.plataforma.Handlers;
-using app.plataforma.Handlers.Hubs;
+using app.plataforma.Hubs;
 using app.plataforma.Identity;
 using app.plataforma.Interfaces;
 using app.plataforma.Services;
@@ -61,14 +61,20 @@ builder.Services.AddScoped<IPostagensService, PostagensService>();
 builder.Services.AddScoped<IFavoritosService, FavoritosService>();
 builder.Services.AddScoped<IUsuarioPostagem, UsuarioPostagem>();
 
+builder.Services.AddSingleton<List<UserAutomatic>>();
+builder.Services.AddSingleton<List<ConnectionAutomatic>>();
+builder.Services.AddSingleton<List<CallAutomatic>>();
+
+
 builder.Services.AddScoped<IAzureBlobService, AzureBlobService>();
 
 //3 elementos
 builder.Services.AddSingleton<List<User>>();
 builder.Services.AddSingleton<List<Connection>>();
-builder.Services.AddSingleton<List<Call>>();
 
 builder.Services.AddSingleton<List<Call>>();
+
+
 
 builder.Services.AddDetection();
 
@@ -150,10 +156,20 @@ app.MapControllerRoute(
 
 app.UseEndpoints(endpoints =>
 {
+
+    endpoints.MapHub<HubAutomatico>("/HubAutomatico", options =>
+    {
+        options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+    });
+
+
+
     endpoints.MapHub<VideoHub>("/video", options =>
     {
         options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
     });
+
+
 });
 
 app.Run();
