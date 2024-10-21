@@ -7,57 +7,41 @@
 
 </style>
 @{
-    // Layout = ViewBag.ConectId != null ? "~/Views/Shared/_LayoutSemHeader.cshtml" : "~/Views/Shared/_Layout.cshtml";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Minha Página";
+    Layout = ViewBag.ConectId != null ? "~/Views/Shared/_LayoutSemHeader.cshtml" : "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Gravação de vídeo";
 }
 <link href="~/css/chatcss.css" rel="stylesheet" />
 <div class="row " id="DivWithID">
     <div class="col-12 card card-body text-center">
         <div class="d-flex justify-content-center align-items-center mx-auto card card-body w-50">
             <strong>Seu Link da Sala:</strong>&nbsp;<a class="p-2 form-control" id="IdUser"></a>
-            <button id="CopyTextBTN" class=" btn btn-outline-success mt-2" data-clipboard-target="#IdUser">Copiar texto</button>
+            <button id="CopyTextBTN" class=" btn btn-outline-success mt-2" data-clipboard-target="#IdUser">Copiar</button>
         </div>
 
 
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-6 col-md-12 col-sm-12">
-        Você
-        <div class="card card-body bg-light m-2 ">
-            <video id="gum" controls playsinline autoplay muted></video>
-        </div>
-
-        <div class="m-2">
-            @* <button id="start">Start camera</button> *@
-            <button id="record" class="btn btn-dark">Iniciar</button>
-            @*                 <button id="play" disabled>Play</button> *@
-            <button id="publicar" disabled class="btn btn-dark">Publicar</button>
-        </div>
-        <div style="display:none">
-            <video id="recorded" style="display:none" playsinline loop></video>
-
-            <div>
-                Recording format: <select id="codecPreferences" disabled></select>
+<div class="row">      
+    
+    @{
+        if (ViewBag.ConectId == null)
+        {
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <div class="card card-body bg-light m-2 ">
+                    <video id="localVideo" controls playsinline autoplay muted></video>
+                </div>
+            </div>        
+        }
+        else
+        {
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                Servidor
+                <div class="card card-body bg-light m-2 ">
+                    <video id="remoteVideo" controls playsinline autoplay></video>
+                </div>
             </div>
-
-            <div>
-                <h4>Media Stream Constraints options</h4>
-                <p>Echo cancellation: <input type="checkbox" id="echoCancellation"></p>
-            </div>
-
-            <div class="d-flex mx-auto">Seu Id:&nbsp;<p id="IdUser"></p></div>
-        </div>
-    </div>
-    <div class="col-lg-6 col-md-12 col-sm-12">
-        Servidor
-        <div class="card card-body bg-light m-2 ">
-            <video id="remoteVideo" controls playsinline autoplay></video>
-        </div>
-    </div>
-
-
+        }
+    }
 </div>
 
 <h3>Arquivos recebidos</h3>
@@ -99,7 +83,7 @@
                             </div>
                             <div class="flex-grow-1 pl-3">
                                 <strong>Sharon Lessman</strong>
-                                <div class="text-muted small"><em>Typing...</em></div>
+                                <div class="text-muted small"><em>...</em></div>
                             </div>
                             <div>
                                 <button class="btn btn-primary btn-lg d-none mr-1 px-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone feather-lg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button>
@@ -185,17 +169,17 @@
 {
 
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
-    <script src="~/js/aovivo/variaveis.js"></script>
+    <script src="~/js/automatico/variaveis.js"></script>
+
+
+
     <script>
         'use strict';
 
 
         const conectParceiro = '@Html.Raw(ViewBag.ConectId)';
         var hubUrl = document.location.origin + '/HubAutomatico';
-
-
-
-        var hubConnection = new signalR.HubConnectionBuilder()
+        var wsconn = new signalR.HubConnectionBuilder()
             .withUrl(hubUrl, signalR.HttpTransportType.WebSockets)
             .configureLogging(signalR.LogLevel.Debug)
             .build();
@@ -222,21 +206,19 @@
             });
 
 
-            hubConnection.start().then(() => {
-                const conectParceiro = '@Html.Raw(ViewBag.ConectId)';
+            wsconn.start().then(() => {
                 user = generateId();
                 userJoin(user);
                 initializeUserMedia() // ligo a cam
-                IdConexao = hubConnection.connection.connectionId
-                $("#IdUser").text(document.location.origin + "@Url.Action("Video", "Postagens")?ConectId=" + IdConexao);
+                IdConexao = wsconn.connection.connectionId
+                $("#IdUser").text(document.location.origin + "@Url.Action("IndexAutomatica", "Postagens")?ConectI d=" +IdConexao);
                 console.info(`Connected as ${user}`);
                 Chamada()
 
             }).catch(err => console.error(err));
 
-            hubConnection.on('AttUsuariosOnline', (userList) => {
+            wsconn.on('AttUsuariosOnline', (userList) => {
 
-              
                 console.info('Check online users...' + JSON.stringify(userList));
                 users = userList;
                 var usuario = users.find(u => u.username == user)
@@ -264,55 +246,57 @@
                 }
             }
 
-            hubConnection.on('receivedatamsg', (signalingUser, data) => {
+
+            wsconn.on('receivedatamsg', (signalingUser, data) => 
+            {
                 var horaAtual = new Date().toLocaleTimeString();
 
                 var msg = data.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
 
 
                 var msgem = `
-                                                    <div class="chat-message-left pb-4 chatHub">
-                            <div>
-                                <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                                <div class="text-muted small text-nowrap mt-2">${horaAtual}</div>
-                            </div>
-                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                                <div class="font-weight-bold mb-1">Sharon Lessman</div>
-                                        ${msg}
-                            </div>
+                                                <div class="chat-message-left pb-4 chatHub">
+                        <div>
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                            <div class="text-muted small text-nowrap mt-2">${horaAtual}</div>
                         </div>
-                                            `
+                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                            <div class="font-weight-bold mb-1">Sharon Lessman</div>
+                                    ${msg}
+                        </div>
+                    </div>
+                                        `
 
                 $("#Chatmesseger").append(msgem);
                 scrollToBottom('Chatmesseger')
 
-            }
-            )
+            });
 
-            hubConnection.on('LidacaoNegada', (callingUser, msg) => {
+            wsconn.on('LidacaoNegada', (callingUser, msg) => {
                 console.info('Ligação negada: ' + JSON.stringify(callingUser));
                 alert("Ligação negada: " + msg)
-                playAudio("gum", 'stop')
-                playAudio("AudioReceive", 'stop')
+                //playAudio("MyAudio", 'stop')
+                //playAudio("AudioReceive", 'stop')
             });
 
             // onde dispara a ligação recebida e salvo o user na variavel "caller"
-            hubConnection.on('ChamadaRecebida', (callingUser) => {
-             
+            wsconn.on('ChamadaRecebida', (callingUser) => {
                 console.info('Chamada Recebida de: ' + JSON.stringify(callingUser));
                 caller = callingUser;
-                //playAudio("AudioReceive", 'play')
-                $('#callmodal').attr('data-callinguser', `${callingUser.username}`);
-                $('#callmodal .modal-body').text(`${callingUser.username} Está ligando...`);
-                //acceptCall();
-                $('#callmodal').modal('show');
+               // playAudio("AudioReceive", 'play')
+                // $('#callmodal').attr('data-callinguser', `${callingUser.username}`);
+                // $('#callmodal .modal-body').text(`${callingUser.username} Está ligando...`);
+                // $('#callmodal').modal('show');
+                acceptCall();
             });
 
-            hubConnection.on('LigaCaoAceita', (acceptingUser) => {
+
+
+            wsconn.on('LigaCaoAceita', (acceptingUser) => {
 
                 $('#divChat').show()
-                playAudio("gum", 'stop')
-                //playAudio("AudioReceive", 'stop')
+                //playAudio("MyAudio", 'stop')
+               // playAudio("AudioReceive", 'stop')
                 caller = acceptingUser;
                 $.unblockUI();
                 console.info('Ligação aceita ' + JSON.stringify(acceptingUser) + '.');
@@ -320,9 +304,9 @@
 
             });
 
-            hubConnection.on('LigacaoDesligada', (acceptingUser) => {
-                playAudio("gum", 'stop')
-                playAudio("AudioReceive", 'stop')
+            wsconn.on('LigacaoDesligada', (acceptingUser) => {
+                //playAudio("MyAudio", 'stop')
+               // playAudio("AudioReceive", 'stop')
                 closeConnection(caller.connectionId);
 
 
@@ -361,7 +345,7 @@
                     this.reset();
                 });
 
-                hubConnection.invoke("senddatamsg", valueMsg, caller.connectionId).catch(function (err) {
+                wsconn.invoke("senddatamsg", valueMsg, caller.connectionId).catch(function (err) {
                     return console.error(err.toString());
                 });
                 scrollToBottom('Chatmesseger')
@@ -420,12 +404,7 @@
 
         })// final document ready
 
-
-
-
     </script>
-  
-    <script src="~/js/aovivo/javascriptbasico.js"></script>
-    <script src="~/js/aovivo/funcoeswebrtc.js"></script>
-    <script src="~/js/aovivo/funcoeshub.js"></script>
+    <script src="~/js/automatico/javascriptbasico.js"></script>
+    <script src="~/js/automatico/funcoeswebrtc.js"></script>
 }

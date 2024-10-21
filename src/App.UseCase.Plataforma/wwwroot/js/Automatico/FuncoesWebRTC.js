@@ -19,7 +19,7 @@ const initializeConnection = (partnerClientId) => {
     connection.addEventListener('connectionstatechange', event => {
         if (connection.connectionState === 'connected') {
             //alert("Conectado")
-            //abdias exibir mensagem ao usuário
+            //todo: exibir mensagem ao usuario
 
         }
     });
@@ -164,7 +164,7 @@ const initiateOffer = (partnerClientId, stream) => {
 sendHubSignal = (candidate, partnerClientId) => {
     console.log('candidate', candidate);
     console.log('SignalR: called sendhubsignal ');
-    hubConnection.invoke('sendSignal', candidate, partnerClientId).catch(errorHandler);
+    wsconn.invoke('sendSignal', candidate, partnerClientId).catch(errorHandler);
 };
 
 const receivedCandidateSignal = (connection, partnerClientId, candidate) => {
@@ -232,7 +232,7 @@ const receivedSdpSignal = (connection, partnerClientId, sdp) => {
 
 
 
-hubConnection.on('receiveSignal', (signalingUser, signal) => {
+wsconn.on('receiveSignal', (signalingUser, signal) => {
  
     newSignal(signalingUser.connectionId, signal);
 });

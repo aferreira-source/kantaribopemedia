@@ -77,6 +77,8 @@ public class HubAutomatico : Hub<IConnectionHubAutomic>
 
     public async Task AnswerCall(bool acceptCall, UserAutomatic targetConnectionId)
     {
+
+
         var callingUser = _users.SingleOrDefault(u => u.ConnectionId == Context.ConnectionId);
         var targetUser = _users.SingleOrDefault(u => u.ConnectionId == targetConnectionId.ConnectionId);
 
@@ -202,7 +204,7 @@ public class HubAutomatico : Hub<IConnectionHubAutomic>
 
     private async Task UpdateOnlineUsers()
     {
-        _users.ForEach(u => u.InCall = GetConnection(u.ConnectionId) != null);
+        _users.ForEach(u => u.InCall = (GetConnection(u.ConnectionId) != null));
         await Clients.All.AttUsuariosOnline(_users);
     }
 
@@ -232,4 +234,9 @@ public class HubAutomatico : Hub<IConnectionHubAutomic>
 
         await _postagensService.InserirAsync(postagem);
     }
+
 }
+
+
+
+
