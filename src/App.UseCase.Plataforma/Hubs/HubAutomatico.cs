@@ -216,10 +216,6 @@ public class HubAutomatico : Hub<IConnectionHubAutomic>
 
     public async Task Publicar(object video)
     {
-        //var totalCaracters = video.Length;
-        var x = video;
-
-
         var postagem = new Postagens()
         {
             usuarioid = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,

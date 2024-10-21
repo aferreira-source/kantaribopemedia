@@ -30,7 +30,27 @@
                 <div class="card card-body bg-light m-2 ">
                     <video id="localVideo" controls playsinline autoplay muted></video>
                 </div>
-            </div>        
+            </div>   
+            
+            
+            <div class="m-2">
+                <button id="record" class="btn btn-dark">Iniciar</button>
+                <button id="publicar" disabled class="btn btn-dark">Publicar</button>
+            </div>
+            <div>
+                <video id="recorded" style="display:none" playsinline loop></video>
+
+                <div>
+                    Recording format: <select id="codecPreferences" disabled></select>
+                </div>
+
+                <div>
+                    <h4>Media Stream Constraints options</h4>
+                    <p>Echo cancellation: <input type="checkbox" id="echoCancellation"></p>
+                </div>
+
+                <div class="d-flex mx-auto">Seu Id:&nbsp;<p id="IdUser"></p></div>
+            </div>
         }
         else
         {

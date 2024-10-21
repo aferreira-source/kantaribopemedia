@@ -81,38 +81,6 @@ const closeConnection = (partnerClientId) => {
 
 
 
-//const initializeUserMedia = async () => {
-//    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-//        // Informe ao usuário que a funcionalidade não é suportada em seu navegador
-//        alert("funcionalidade não é suportada em seu navegador")
-//        return;
-//    }
-
-//    try {
-//        const stream = await navigator.mediaDevices.getUserMedia({
-//            audio: true,
-//            video: true,
-//        });
-//        otherAudio.srcObject = stream;
-//        localstream = stream;
-
-//    } catch (err) {
-//        // Se o usuário negar o acesso ao dispositivo de áudio/vídeo, mostre uma mensagem de erro adequada
-//        console.error('Não foi possível acessar o dispositivo de áudio/vídeo', err);
-//        try {
-//            const stream = await navigator.mediaDevices.getUserMedia({
-//                audio: true,
-//                video: false,
-//            });
-//            otherAudio.srcObject = stream;
-//            localstream = stream;
-//        } catch (err) {
-//            // Se não for possível acessar o dispositivo de áudio, mostre uma mensagem de erro adequada
-//            console.error('Não foi possível acessar o dispositivo de áudio', err);
-//        }
-//    }
-//};
-
 function playAudio(id, task) {
     var audio = $("#" + id);
     if (task == 'play') {
