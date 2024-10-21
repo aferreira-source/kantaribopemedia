@@ -117,9 +117,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DefaultHttpClient", function() { return _index__WEBPACK_IMPORTED_MODULE_1__["DefaultHttpClient"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HubConnection", function() { return _index__WEBPACK_IMPORTED_MODULE_1__["HubConnection"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hubConnection", function() { return _index__WEBPACK_IMPORTED_MODULE_1__["hubConnection"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HubConnectionState", function() { return _index__WEBPACK_IMPORTED_MODULE_1__["HubConnectionState"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hubConnectionState", function() { return _index__WEBPACK_IMPORTED_MODULE_1__["hubConnectionState"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HubConnectionBuilder", function() { return _index__WEBPACK_IMPORTED_MODULE_1__["HubConnectionBuilder"]; });
 
@@ -1413,10 +1413,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _DefaultHttpClient__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DefaultHttpClient", function() { return _DefaultHttpClient__WEBPACK_IMPORTED_MODULE_2__["DefaultHttpClient"]; });
 
-/* harmony import */ var _HubConnection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HubConnection", function() { return _HubConnection__WEBPACK_IMPORTED_MODULE_3__["HubConnection"]; });
+/* harmony import */ var _hubConnection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hubConnection", function() { return _hubConnection__WEBPACK_IMPORTED_MODULE_3__["hubConnection"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HubConnectionState", function() { return _HubConnection__WEBPACK_IMPORTED_MODULE_3__["HubConnectionState"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hubConnectionState", function() { return _hubConnection__WEBPACK_IMPORTED_MODULE_3__["hubConnectionState"]; });
 
 /* harmony import */ var _HubConnectionBuilder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(17);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HubConnectionBuilder", function() { return _HubConnectionBuilder__WEBPACK_IMPORTED_MODULE_4__["HubConnectionBuilder"]; });
@@ -1841,8 +1841,8 @@ var LogLevel;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HubConnectionState", function() { return HubConnectionState; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HubConnection", function() { return HubConnection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hubConnectionState", function() { return hubConnectionState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hubConnection", function() { return hubConnection; });
 /* harmony import */ var _HandshakeProtocol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
 /* harmony import */ var _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9);
@@ -1892,23 +1892,23 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 var DEFAULT_TIMEOUT_IN_MS = 30 * 1000;
 var DEFAULT_PING_INTERVAL_IN_MS = 15 * 1000;
-/** Describes the current state of the {@link HubConnection} to the server. */
-var HubConnectionState;
-(function (HubConnectionState) {
+/** Describes the current state of the {@link hubConnection} to the server. */
+var hubConnectionState;
+(function (hubConnectionState) {
     /** The hub connection is disconnected. */
-    HubConnectionState["Disconnected"] = "Disconnected";
+    hubConnectionState["Disconnected"] = "Disconnected";
     /** The hub connection is connecting. */
-    HubConnectionState["Connecting"] = "Connecting";
+    hubConnectionState["Connecting"] = "Connecting";
     /** The hub connection is connected. */
-    HubConnectionState["Connected"] = "Connected";
+    hubConnectionState["Connected"] = "Connected";
     /** The hub connection is disconnecting. */
-    HubConnectionState["Disconnecting"] = "Disconnecting";
+    hubConnectionState["Disconnecting"] = "Disconnecting";
     /** The hub connection is reconnecting. */
-    HubConnectionState["Reconnecting"] = "Reconnecting";
-})(HubConnectionState || (HubConnectionState = {}));
+    hubConnectionState["Reconnecting"] = "Reconnecting";
+})(hubConnectionState || (hubConnectionState = {}));
 /** Represents a connection to a SignalR Hub. */
-var HubConnection = /** @class */ (function () {
-    function HubConnection(connection, logger, protocol, reconnectPolicy) {
+var hubConnection = /** @class */ (function () {
+    function hubConnection(connection, logger, protocol, reconnectPolicy) {
         var _this = this;
         _Utils__WEBPACK_IMPORTED_MODULE_4__["Arg"].isRequired(connection, "connection");
         _Utils__WEBPACK_IMPORTED_MODULE_4__["Arg"].isRequired(logger, "logger");
@@ -1929,7 +1929,7 @@ var HubConnection = /** @class */ (function () {
         this.reconnectedCallbacks = [];
         this.invocationId = 0;
         this.receivedHandshakeResponse = false;
-        this.connectionState = HubConnectionState.Disconnected;
+        this.connectionState = hubConnectionState.Disconnected;
         this.connectionStarted = false;
         this.cachedPingMessage = this.protocol.writeMessage({ type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__["MessageType"].Ping });
     }
@@ -1938,19 +1938,19 @@ var HubConnection = /** @class */ (function () {
     // create method that can be used by HubConnectionBuilder. An "internal" constructor would just
     // be stripped away and the '.d.ts' file would have no constructor, which is interpreted as a
     // public parameter-less constructor.
-    HubConnection.create = function (connection, logger, protocol, reconnectPolicy) {
-        return new HubConnection(connection, logger, protocol, reconnectPolicy);
+    hubConnection.create = function (connection, logger, protocol, reconnectPolicy) {
+        return new hubConnection(connection, logger, protocol, reconnectPolicy);
     };
-    Object.defineProperty(HubConnection.prototype, "state", {
-        /** Indicates the state of the {@link HubConnection} to the server. */
+    Object.defineProperty(hubConnection.prototype, "state", {
+        /** Indicates the state of the {@link hubConnection} to the server. */
         get: function () {
             return this.connectionState;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(HubConnection.prototype, "connectionId", {
-        /** Represents the connection id of the {@link HubConnection} on the server. The connection id will be null when the connection is either
+    Object.defineProperty(hubConnection.prototype, "connectionId", {
+        /** Represents the connection id of the {@link hubConnection} on the server. The connection id will be null when the connection is either
          *  in the disconnected state or if the negotiation step was skipped.
          */
         get: function () {
@@ -1959,22 +1959,22 @@ var HubConnection = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(HubConnection.prototype, "baseUrl", {
-        /** Indicates the url of the {@link HubConnection} to the server. */
+    Object.defineProperty(hubConnection.prototype, "baseUrl", {
+        /** Indicates the url of the {@link hubConnection} to the server. */
         get: function () {
             return this.connection.baseUrl || "";
         },
         /**
-         * Sets a new url for the HubConnection. Note that the url can only be changed when the connection is in either the Disconnected or
+         * Sets a new url for the hubConnection. Note that the url can only be changed when the connection is in either the Disconnected or
          * Reconnecting states.
          * @param {string} url The url to connect to.
          */
         set: function (url) {
-            if (this.connectionState !== HubConnectionState.Disconnected && this.connectionState !== HubConnectionState.Reconnecting) {
-                throw new Error("The HubConnection must be in the Disconnected or Reconnecting state to change the url.");
+            if (this.connectionState !== hubConnectionState.Disconnected && this.connectionState !== hubConnectionState.Reconnecting) {
+                throw new Error("The hubConnection must be in the Disconnected or Reconnecting state to change the url.");
             }
             if (!url) {
-                throw new Error("The HubConnection url must be a valid url.");
+                throw new Error("The hubConnection url must be a valid url.");
             }
             this.connection.baseUrl = url;
         },
@@ -1985,42 +1985,42 @@ var HubConnection = /** @class */ (function () {
      *
      * @returns {Promise<void>} A Promise that resolves when the connection has been successfully established, or rejects with an error.
      */
-    HubConnection.prototype.start = function () {
+    hubConnection.prototype.start = function () {
         this.startPromise = this.startWithStateTransitions();
         return this.startPromise;
     };
-    HubConnection.prototype.startWithStateTransitions = function () {
+    hubConnection.prototype.startWithStateTransitions = function () {
         return __awaiter(this, void 0, void 0, function () {
             var e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (this.connectionState !== HubConnectionState.Disconnected) {
-                            return [2 /*return*/, Promise.reject(new Error("Cannot start a HubConnection that is not in the 'Disconnected' state."))];
+                        if (this.connectionState !== hubConnectionState.Disconnected) {
+                            return [2 /*return*/, Promise.reject(new Error("Cannot start a hubConnection that is not in the 'Disconnected' state."))];
                         }
-                        this.connectionState = HubConnectionState.Connecting;
-                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Starting HubConnection.");
+                        this.connectionState = hubConnectionState.Connecting;
+                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Starting hubConnection.");
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, this.startInternal()];
                     case 2:
                         _a.sent();
-                        this.connectionState = HubConnectionState.Connected;
+                        this.connectionState = hubConnectionState.Connected;
                         this.connectionStarted = true;
-                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "HubConnection connected successfully.");
+                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "hubConnection connected successfully.");
                         return [3 /*break*/, 4];
                     case 3:
                         e_1 = _a.sent();
-                        this.connectionState = HubConnectionState.Disconnected;
-                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "HubConnection failed to start successfully because of error '" + e_1 + "'.");
+                        this.connectionState = hubConnectionState.Disconnected;
+                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "hubConnection failed to start successfully because of error '" + e_1 + "'.");
                         return [2 /*return*/, Promise.reject(e_1)];
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    HubConnection.prototype.startInternal = function () {
+    hubConnection.prototype.startInternal = function () {
         return __awaiter(this, void 0, void 0, function () {
             var handshakePromise, handshakeRequest, e_2;
             var _this = this;
@@ -2067,15 +2067,15 @@ var HubConnection = /** @class */ (function () {
                         return [3 /*break*/, 7];
                     case 5:
                         e_2 = _a.sent();
-                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Hub handshake failed with error '" + e_2 + "' during start(). Stopping HubConnection.");
+                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Hub handshake failed with error '" + e_2 + "' during start(). Stopping hubConnection.");
                         this.cleanupTimeout();
                         this.cleanupPingTimer();
                         // HttpConnection.stop() should not complete until after the onclose callback is invoked.
-                        // This will transition the HubConnection to the disconnected state before HttpConnection.stop() completes.
+                        // This will transition the hubConnection to the disconnected state before HttpConnection.stop() completes.
                         return [4 /*yield*/, this.connection.stop(e_2)];
                     case 6:
                         // HttpConnection.stop() should not complete until after the onclose callback is invoked.
-                        // This will transition the HubConnection to the disconnected state before HttpConnection.stop() completes.
+                        // This will transition the hubConnection to the disconnected state before HttpConnection.stop() completes.
                         _a.sent();
                         throw e_2;
                     case 7: return [2 /*return*/];
@@ -2087,7 +2087,7 @@ var HubConnection = /** @class */ (function () {
      *
      * @returns {Promise<void>} A Promise that resolves when the connection has been successfully terminated, or rejects with an error.
      */
-    HubConnection.prototype.stop = function () {
+    hubConnection.prototype.stop = function () {
         return __awaiter(this, void 0, void 0, function () {
             var startPromise, e_3;
             return __generator(this, function (_a) {
@@ -2115,17 +2115,17 @@ var HubConnection = /** @class */ (function () {
             });
         });
     };
-    HubConnection.prototype.stopInternal = function (error) {
-        if (this.connectionState === HubConnectionState.Disconnected) {
-            this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Call to HubConnection.stop(" + error + ") ignored because it is already in the disconnected state.");
+    hubConnection.prototype.stopInternal = function (error) {
+        if (this.connectionState === hubConnectionState.Disconnected) {
+            this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Call to hubConnection.stop(" + error + ") ignored because it is already in the disconnected state.");
             return Promise.resolve();
         }
-        if (this.connectionState === HubConnectionState.Disconnecting) {
+        if (this.connectionState === hubConnectionState.Disconnecting) {
             this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Call to HttpConnection.stop(" + error + ") ignored because the connection is already in the disconnecting state.");
             return this.stopPromise;
         }
-        this.connectionState = HubConnectionState.Disconnecting;
-        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Stopping HubConnection.");
+        this.connectionState = hubConnectionState.Disconnecting;
+        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Stopping hubConnection.");
         if (this.reconnectDelayHandle) {
             // We're in a reconnect delay which means the underlying connection is currently already stopped.
             // Just clear the handle to stop the reconnect loop (which no one is waiting on thankfully) and
@@ -2140,7 +2140,7 @@ var HubConnection = /** @class */ (function () {
         this.cleanupPingTimer();
         this.stopDuringStartError = error || new Error("The connection was stopped before the hub handshake could complete.");
         // HttpConnection.stop() should not complete until after either HttpConnection.start() fails
-        // or the onclose callback is invoked. The onclose callback will transition the HubConnection
+        // or the onclose callback is invoked. The onclose callback will transition the hubConnection
         // to the disconnected state if need be before HttpConnection.stop() completes.
         return this.connection.stop(error);
     };
@@ -2151,7 +2151,7 @@ var HubConnection = /** @class */ (function () {
      * @param {any[]} args The arguments used to invoke the server method.
      * @returns {IStreamResult<T>} An object that yields results from the server as they are received.
      */
-    HubConnection.prototype.stream = function (methodName) {
+    hubConnection.prototype.stream = function (methodName) {
         var _this = this;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -2196,7 +2196,7 @@ var HubConnection = /** @class */ (function () {
         this.launchStreams(streams, promiseQueue);
         return subject;
     };
-    HubConnection.prototype.sendMessage = function (message) {
+    hubConnection.prototype.sendMessage = function (message) {
         this.resetKeepAliveInterval();
         return this.connection.send(message);
     };
@@ -2204,7 +2204,7 @@ var HubConnection = /** @class */ (function () {
      * Sends a js object to the server.
      * @param message The js object to serialize and send.
      */
-    HubConnection.prototype.sendWithProtocol = function (message) {
+    hubConnection.prototype.sendWithProtocol = function (message) {
         return this.sendMessage(this.protocol.writeMessage(message));
     };
     /** Invokes a hub method on the server using the specified name and arguments. Does not wait for a response from the receiver.
@@ -2216,7 +2216,7 @@ var HubConnection = /** @class */ (function () {
      * @param {any[]} args The arguments used to invoke the server method.
      * @returns {Promise<void>} A Promise that resolves when the invocation has been successfully sent, or rejects with an error.
      */
-    HubConnection.prototype.send = function (methodName) {
+    hubConnection.prototype.send = function (methodName) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
@@ -2237,7 +2237,7 @@ var HubConnection = /** @class */ (function () {
      * @param {any[]} args The arguments used to invoke the server method.
      * @returns {Promise<T>} A Promise that resolves with the result of the server method (if any), or rejects with an error.
      */
-    HubConnection.prototype.invoke = function (methodName) {
+    hubConnection.prototype.invoke = function (methodName) {
         var _this = this;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -2282,7 +2282,7 @@ var HubConnection = /** @class */ (function () {
      * @param {string} methodName The name of the hub method to define.
      * @param {Function} newMethod The handler that will be raised when the hub method is invoked.
      */
-    HubConnection.prototype.on = function (methodName, newMethod) {
+    hubConnection.prototype.on = function (methodName, newMethod) {
         if (!methodName || !newMethod) {
             return;
         }
@@ -2296,7 +2296,7 @@ var HubConnection = /** @class */ (function () {
         }
         this.methods[methodName].push(newMethod);
     };
-    HubConnection.prototype.off = function (methodName, method) {
+    hubConnection.prototype.off = function (methodName, method) {
         if (!methodName) {
             return;
         }
@@ -2322,7 +2322,7 @@ var HubConnection = /** @class */ (function () {
      *
      * @param {Function} callback The handler that will be invoked when the connection is closed. Optionally receives a single argument containing the error that caused the connection to close (if any).
      */
-    HubConnection.prototype.onclose = function (callback) {
+    hubConnection.prototype.onclose = function (callback) {
         if (callback) {
             this.closedCallbacks.push(callback);
         }
@@ -2331,7 +2331,7 @@ var HubConnection = /** @class */ (function () {
      *
      * @param {Function} callback The handler that will be invoked when the connection starts reconnecting. Optionally receives a single argument containing the error that caused the connection to start reconnecting (if any).
      */
-    HubConnection.prototype.onreconnecting = function (callback) {
+    hubConnection.prototype.onreconnecting = function (callback) {
         if (callback) {
             this.reconnectingCallbacks.push(callback);
         }
@@ -2340,12 +2340,12 @@ var HubConnection = /** @class */ (function () {
      *
      * @param {Function} callback The handler that will be invoked when the connection successfully reconnects.
      */
-    HubConnection.prototype.onreconnected = function (callback) {
+    hubConnection.prototype.onreconnected = function (callback) {
         if (callback) {
             this.reconnectedCallbacks.push(callback);
         }
     };
-    HubConnection.prototype.processIncomingData = function (data) {
+    hubConnection.prototype.processIncomingData = function (data) {
         this.cleanupTimeout();
         if (!this.receivedHandshakeResponse) {
             data = this.processHandshakeResponse(data);
@@ -2396,7 +2396,7 @@ var HubConnection = /** @class */ (function () {
         }
         this.resetTimeoutPeriod();
     };
-    HubConnection.prototype.processHandshakeResponse = function (data) {
+    hubConnection.prototype.processHandshakeResponse = function (data) {
         var _a;
         var responseMessage;
         var remainingData;
@@ -2423,7 +2423,7 @@ var HubConnection = /** @class */ (function () {
         this.handshakeResolver();
         return remainingData;
     };
-    HubConnection.prototype.resetKeepAliveInterval = function () {
+    hubConnection.prototype.resetKeepAliveInterval = function () {
         var _this = this;
         this.cleanupPingTimer();
         this.pingServerHandle = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
@@ -2431,7 +2431,7 @@ var HubConnection = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!(this.connectionState === HubConnectionState.Connected)) return [3 /*break*/, 4];
+                        if (!(this.connectionState === hubConnectionState.Connected)) return [3 /*break*/, 4];
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 3, , 4]);
@@ -2450,20 +2450,20 @@ var HubConnection = /** @class */ (function () {
             });
         }); }, this.keepAliveIntervalInMilliseconds);
     };
-    HubConnection.prototype.resetTimeoutPeriod = function () {
+    hubConnection.prototype.resetTimeoutPeriod = function () {
         var _this = this;
         if (!this.connection.features || !this.connection.features.inherentKeepAlive) {
             // Set the timeout timer
             this.timeoutHandle = setTimeout(function () { return _this.serverTimeout(); }, this.serverTimeoutInMilliseconds);
         }
     };
-    HubConnection.prototype.serverTimeout = function () {
+    hubConnection.prototype.serverTimeout = function () {
         // The server hasn't talked to us in a while. It doesn't like us anymore ... :(
         // Terminate the connection, but we don't need to wait on the promise. This could trigger reconnecting.
         // tslint:disable-next-line:no-floating-promises
         this.connection.stop(new Error("Server timeout elapsed without receiving a message from the server."));
     };
-    HubConnection.prototype.invokeClientMethod = function (invocationMessage) {
+    hubConnection.prototype.invokeClientMethod = function (invocationMessage) {
         var _this = this;
         var methods = this.methods[invocationMessage.target.toLowerCase()];
         if (methods) {
@@ -2485,8 +2485,8 @@ var HubConnection = /** @class */ (function () {
             this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Warning, "No client method with the name '" + invocationMessage.target + "' found.");
         }
     };
-    HubConnection.prototype.connectionClosed = function (error) {
-        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "HubConnection.connectionClosed(" + error + ") called while in state " + this.connectionState + ".");
+    hubConnection.prototype.connectionClosed = function (error) {
+        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "hubConnection.connectionClosed(" + error + ") called while in state " + this.connectionState + ".");
         // Triggering this.handshakeRejecter is insufficient because it could already be resolved without the continuation having run yet.
         this.stopDuringStartError = this.stopDuringStartError || error || new Error("The underlying connection was closed before the hub handshake could complete.");
         // If the handshake is in progress, start will be waiting for the handshake promise, so we complete it.
@@ -2497,26 +2497,26 @@ var HubConnection = /** @class */ (function () {
         this.cancelCallbacksWithError(error || new Error("Invocation canceled due to the underlying connection being closed."));
         this.cleanupTimeout();
         this.cleanupPingTimer();
-        if (this.connectionState === HubConnectionState.Disconnecting) {
+        if (this.connectionState === hubConnectionState.Disconnecting) {
             this.completeClose(error);
         }
-        else if (this.connectionState === HubConnectionState.Connected && this.reconnectPolicy) {
+        else if (this.connectionState === hubConnectionState.Connected && this.reconnectPolicy) {
             // tslint:disable-next-line:no-floating-promises
             this.reconnect(error);
         }
-        else if (this.connectionState === HubConnectionState.Connected) {
+        else if (this.connectionState === hubConnectionState.Connected) {
             this.completeClose(error);
         }
-        // If none of the above if conditions were true were called the HubConnection must be in either:
+        // If none of the above if conditions were true were called the hubConnection must be in either:
         // 1. The Connecting state in which case the handshakeResolver will complete it and stopDuringStartError will fail it.
         // 2. The Reconnecting state in which case the handshakeResolver will complete it and stopDuringStartError will fail the current reconnect attempt
         //    and potentially continue the reconnect() loop.
         // 3. The Disconnected state in which case we're already done.
     };
-    HubConnection.prototype.completeClose = function (error) {
+    hubConnection.prototype.completeClose = function (error) {
         var _this = this;
         if (this.connectionStarted) {
-            this.connectionState = HubConnectionState.Disconnected;
+            this.connectionState = hubConnectionState.Disconnected;
             this.connectionStarted = false;
             try {
                 this.closedCallbacks.forEach(function (c) { return c.apply(_this, [error]); });
@@ -2526,7 +2526,7 @@ var HubConnection = /** @class */ (function () {
             }
         }
     };
-    HubConnection.prototype.reconnect = function (error) {
+    hubConnection.prototype.reconnect = function (error) {
         return __awaiter(this, void 0, void 0, function () {
             var reconnectStartTime, previousReconnectAttempts, retryError, nextRetryDelay, e_4;
             var _this = this;
@@ -2542,7 +2542,7 @@ var HubConnection = /** @class */ (function () {
                             this.completeClose(error);
                             return [2 /*return*/];
                         }
-                        this.connectionState = HubConnectionState.Reconnecting;
+                        this.connectionState = hubConnectionState.Reconnecting;
                         if (error) {
                             this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Information, "Connection reconnecting because of error '" + error + "'.");
                         }
@@ -2557,7 +2557,7 @@ var HubConnection = /** @class */ (function () {
                                 this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Error, "An onreconnecting callback called with error '" + error + "' threw error '" + e + "'.");
                             }
                             // Exit early if an onreconnecting callback called connection.stop().
-                            if (this.connectionState !== HubConnectionState.Reconnecting) {
+                            if (this.connectionState !== hubConnectionState.Reconnecting) {
                                 this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Connection left the reconnecting state in onreconnecting callback. Done reconnecting.");
                                 return [2 /*return*/];
                             }
@@ -2572,7 +2572,7 @@ var HubConnection = /** @class */ (function () {
                     case 2:
                         _a.sent();
                         this.reconnectDelayHandle = undefined;
-                        if (this.connectionState !== HubConnectionState.Reconnecting) {
+                        if (this.connectionState !== hubConnectionState.Reconnecting) {
                             this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Connection left the reconnecting state during reconnect delay. Done reconnecting.");
                             return [2 /*return*/];
                         }
@@ -2582,8 +2582,8 @@ var HubConnection = /** @class */ (function () {
                         return [4 /*yield*/, this.startInternal()];
                     case 4:
                         _a.sent();
-                        this.connectionState = HubConnectionState.Connected;
-                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Information, "HubConnection reconnected successfully.");
+                        this.connectionState = hubConnectionState.Connected;
+                        this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Information, "hubConnection reconnected successfully.");
                         if (this.onreconnected) {
                             try {
                                 this.reconnectedCallbacks.forEach(function (c) { return c.apply(_this, [_this.connection.connectionId]); });
@@ -2596,7 +2596,7 @@ var HubConnection = /** @class */ (function () {
                     case 5:
                         e_4 = _a.sent();
                         this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Information, "Reconnect attempt failed because of error '" + e_4 + "'.");
-                        if (this.connectionState !== HubConnectionState.Reconnecting) {
+                        if (this.connectionState !== hubConnectionState.Reconnecting) {
                             this.logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__["LogLevel"].Debug, "Connection left the reconnecting state during reconnect attempt. Done reconnecting.");
                             return [2 /*return*/];
                         }
@@ -2612,7 +2612,7 @@ var HubConnection = /** @class */ (function () {
             });
         });
     };
-    HubConnection.prototype.getNextRetryDelay = function (previousRetryCount, elapsedMilliseconds, retryReason) {
+    hubConnection.prototype.getNextRetryDelay = function (previousRetryCount, elapsedMilliseconds, retryReason) {
         try {
             return this.reconnectPolicy.nextRetryDelayInMilliseconds({
                 elapsedMilliseconds: elapsedMilliseconds,
@@ -2625,7 +2625,7 @@ var HubConnection = /** @class */ (function () {
             return null;
         }
     };
-    HubConnection.prototype.cancelCallbacksWithError = function (error) {
+    hubConnection.prototype.cancelCallbacksWithError = function (error) {
         var callbacks = this.callbacks;
         this.callbacks = {};
         Object.keys(callbacks)
@@ -2634,17 +2634,17 @@ var HubConnection = /** @class */ (function () {
             callback(null, error);
         });
     };
-    HubConnection.prototype.cleanupPingTimer = function () {
+    hubConnection.prototype.cleanupPingTimer = function () {
         if (this.pingServerHandle) {
             clearTimeout(this.pingServerHandle);
         }
     };
-    HubConnection.prototype.cleanupTimeout = function () {
+    hubConnection.prototype.cleanupTimeout = function () {
         if (this.timeoutHandle) {
             clearTimeout(this.timeoutHandle);
         }
     };
-    HubConnection.prototype.createInvocation = function (methodName, args, nonblocking, streamIds) {
+    hubConnection.prototype.createInvocation = function (methodName, args, nonblocking, streamIds) {
         if (nonblocking) {
             return {
                 arguments: args,
@@ -2665,7 +2665,7 @@ var HubConnection = /** @class */ (function () {
             };
         }
     };
-    HubConnection.prototype.launchStreams = function (streams, promiseQueue) {
+    hubConnection.prototype.launchStreams = function (streams, promiseQueue) {
         var _this = this;
         if (streams.length === 0) {
             return;
@@ -2703,7 +2703,7 @@ var HubConnection = /** @class */ (function () {
             _loop_1(streamId);
         }
     };
-    HubConnection.prototype.replaceStreamingParams = function (args) {
+    hubConnection.prototype.replaceStreamingParams = function (args) {
         var streams = [];
         var streamIds = [];
         for (var i = 0; i < args.length; i++) {
@@ -2720,11 +2720,11 @@ var HubConnection = /** @class */ (function () {
         }
         return [streams, streamIds];
     };
-    HubConnection.prototype.isObservable = function (arg) {
+    hubConnection.prototype.isObservable = function (arg) {
         // This allows other stream implementations to just work (like rxjs)
         return arg && arg.subscribe && typeof arg.subscribe === "function";
     };
-    HubConnection.prototype.createStreamInvocation = function (methodName, args, streamIds) {
+    hubConnection.prototype.createStreamInvocation = function (methodName, args, streamIds) {
         var invocationId = this.invocationId;
         this.invocationId++;
         return {
@@ -2735,20 +2735,20 @@ var HubConnection = /** @class */ (function () {
             type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__["MessageType"].StreamInvocation,
         };
     };
-    HubConnection.prototype.createCancelInvocation = function (id) {
+    hubConnection.prototype.createCancelInvocation = function (id) {
         return {
             invocationId: id,
             type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__["MessageType"].CancelInvocation,
         };
     };
-    HubConnection.prototype.createStreamItemMessage = function (id, item) {
+    hubConnection.prototype.createStreamItemMessage = function (id, item) {
         return {
             invocationId: id,
             item: item,
             type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__["MessageType"].StreamItem,
         };
     };
-    HubConnection.prototype.createCompletionMessage = function (id, error, result) {
+    hubConnection.prototype.createCompletionMessage = function (id, error, result) {
         if (error) {
             return {
                 error: error,
@@ -2762,7 +2762,7 @@ var HubConnection = /** @class */ (function () {
             type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__["MessageType"].Completion,
         };
     };
-    return HubConnection;
+    return hubConnection;
 }());
 
 
@@ -3208,7 +3208,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HubConnectionBuilder", function() { return HubConnectionBuilder; });
 /* harmony import */ var _DefaultReconnectPolicy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _HttpConnection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
-/* harmony import */ var _HubConnection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(10);
+/* harmony import */ var _hubConnection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(10);
 /* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
 /* harmony import */ var _JsonHubProtocol__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(25);
 /* harmony import */ var _Loggers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(14);
@@ -3254,7 +3254,7 @@ function parseLogLevel(name) {
         throw new Error("Unknown log level: " + name);
     }
 }
-/** A builder for configuring {@link @microsoft/signalr.HubConnection} instances. */
+/** A builder for configuring {@link @microsoft/signalr.hubConnection} instances. */
 var HubConnectionBuilder = /** @class */ (function () {
     function HubConnectionBuilder() {
     }
@@ -3285,7 +3285,7 @@ var HubConnectionBuilder = /** @class */ (function () {
         }
         return this;
     };
-    /** Configures the {@link @microsoft/signalr.HubConnection} to use the specified Hub Protocol.
+    /** Configures the {@link @microsoft/signalr.hubConnection} to use the specified Hub Protocol.
      *
      * @param {IHubProtocol} protocol The {@link @microsoft/signalr.IHubProtocol} implementation to use.
      */
@@ -3309,9 +3309,9 @@ var HubConnectionBuilder = /** @class */ (function () {
         }
         return this;
     };
-    /** Creates a {@link @microsoft/signalr.HubConnection} from the configuration options specified in this builder.
+    /** Creates a {@link @microsoft/signalr.hubConnection} from the configuration options specified in this builder.
      *
-     * @returns {HubConnection} The configured {@link @microsoft/signalr.HubConnection}.
+     * @returns {hubConnection} The configured {@link @microsoft/signalr.hubConnection}.
      */
     HubConnectionBuilder.prototype.build = function () {
         // If httpConnectionOptions has a logger, use it. Otherwise, override it with the one
@@ -3327,7 +3327,7 @@ var HubConnectionBuilder = /** @class */ (function () {
             throw new Error("The 'HubConnectionBuilder.withUrl' method must be called before building the connection.");
         }
         var connection = new _HttpConnection__WEBPACK_IMPORTED_MODULE_1__["HttpConnection"](this.url, httpConnectionOptions);
-        return _HubConnection__WEBPACK_IMPORTED_MODULE_2__["HubConnection"].create(connection, this.logger || _Loggers__WEBPACK_IMPORTED_MODULE_5__["NullLogger"].instance, this.protocol || new _JsonHubProtocol__WEBPACK_IMPORTED_MODULE_4__["JsonHubProtocol"](), this.reconnectPolicy);
+        return _hubConnection__WEBPACK_IMPORTED_MODULE_2__["hubConnection"].create(connection, this.logger || _Loggers__WEBPACK_IMPORTED_MODULE_5__["NullLogger"].instance, this.protocol || new _JsonHubProtocol__WEBPACK_IMPORTED_MODULE_4__["JsonHubProtocol"](), this.reconnectPolicy);
     };
     return HubConnectionBuilder;
 }());
