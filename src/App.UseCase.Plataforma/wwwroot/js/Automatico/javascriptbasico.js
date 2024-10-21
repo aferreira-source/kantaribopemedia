@@ -15,9 +15,9 @@ const declineCall = () => {
     var callingUserName = $('#callmodal').attr('data-cid');
    wsconn.invoke('AnswerCall', false, caller).catch(err => console.error(err));
     caller = null;
-    playAudio("MyAudio", 'stop')
-    playAudio("AudioReceive", 'stop')
-    $('#callmodal').modal('hide');
+    //playAudio("MyAudio", 'stop')
+    //playAudio("AudioReceive", 'stop')
+    //$('#callmodal').modal('hide');
 };
 
 const askUsername = () => {
@@ -55,7 +55,7 @@ const limparChat = () => {
 }
 const callUser = (connectionId) => {
     /* caller = { "connectionId": connectionId }*/
-    playAudio("MyAudio", 'play')
+    //playAudio("MyAudio", 'play')
    wsconn.invoke('call', { "connectionId": connectionId });
 };
 const endCall = (connectionId) => {
