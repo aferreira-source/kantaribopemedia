@@ -4,14 +4,14 @@ using System.Security.Claims;
 
 namespace app.plataforma.Hubs;
 
-public class HubAutomatico : Hub<IConnectionHubAutomic>
+public class HubTransmissaoVideo : Hub<IConnectionHubTransmissao>
 {
     private readonly List<UserAutomatic> _users;
     private readonly List<ConnectionAutomatic> _connections;
     private readonly List<CallAutomatic> _calls;
     protected readonly IHttpContextAccessor _httpContextAccessor;
     protected readonly IPostagensService _postagensService;
-    public HubAutomatico(List<UserAutomatic> users,
+    public HubTransmissaoVideo(List<UserAutomatic> users,
         List<ConnectionAutomatic> connections,
         List<CallAutomatic> calls,
         IHttpContextAccessor httpContextAccessor,

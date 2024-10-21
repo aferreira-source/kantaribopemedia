@@ -157,17 +157,17 @@ app.MapControllerRoute(
 app.UseEndpoints(endpoints =>
 {
 
-    endpoints.MapHub<HubAutomatico>("/HubAutomatico", options =>
+    endpoints.MapHub<HubTransmissaoVideo>("/transmisao-video", options =>
     {
         options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
     });
 
 
 
-    endpoints.MapHub<VideoHub>("/video", options =>
-    {
-        options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
-    });
+    //endpoints.MapHub<VideoHub>("/video", options =>
+    //{
+    //    options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+    //});
 
 
 });

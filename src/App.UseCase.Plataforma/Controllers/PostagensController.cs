@@ -49,13 +49,6 @@ public class PostagensController : Controller
         return View(model);
     }
 
-    [HttpGet("GetId")]
-    public async Task<string> GetId()
-    {
-        var usuarioid = _httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-        return usuarioid;
-    }
-
     public IActionResult Video(string ConectId)
     {
         ViewBag.ConectId = ConectId != null ? ConectId : null;
@@ -63,13 +56,6 @@ public class PostagensController : Controller
     }
 
 
-    public IActionResult IndexAutomatica(string ConectId)
-    {
-        ViewBag.ConectId = ConectId != null ? ConectId : null;
-
-
-        return View();
-    }
     public IActionResult Index()
     {
         return View();

@@ -2,7 +2,7 @@
 
 namespace app.plataforma.Hubs;
 
-public interface IConnectionHubAutomic
+public interface IConnectionHubTransmissao
 {
     Task AttUsuariosOnline(List<UserAutomatic> userList);
     Task LigaCaoAceita(UserAutomatic acceptingUser);

@@ -31,74 +31,11 @@ body {
 }
 
 
-/*#video-publicado {
-    min-width: auto;
-    min-height: auto;
-    max-width: 50vh;
-    max-height: 50vh;
-    padding-bottom: 4px;
-    z-index: -100;
-    background: url('../images/kantaribope.png');
-    background-size: cover;
-}*/
-
-/*.video-wrapper {*/
-    /* Telling our absolute positioned video to 
-  be relative to this element */
-    /*position: relative;
-    width: 400px;
-    height: 200px;*/
-    /* Will not allow the video to overflow the 
-  container */
-    /*overflow: hidden;*/
-    /* Centering the container's content vertically 
-  and horizontally */
-    /*text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-video {*/
-    /** Simulationg background-size: cover */
-    /*object-fit: cover;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}*/
-
-
-/*video {
-    object-fit: contain;
-    background-color: black;
-    position: center;
-    top: 0;
-    left: 0;
-    height: 400px;
-    width: 100%;
-}*/
-
 #video-postagens {
     height: auto;
     margin-top: 10px;
     width: 100%;
 }
-
-/*#video-wrapper {
-    border: 2px solid groove;
-    border-inline-color:black;
-    width: 300px;
-    height: 200px;
-    position: center;
-    overflow: hidden;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding:10px;
-}*/
 
 
 .card-video {
@@ -133,4 +70,12 @@ video {*/
 .card {
     border-color: white;
 }
+
+#localVideo {
+    height: auto;
+    margin-top: 10px;
+    width: 100%;
+}
+
+
 
